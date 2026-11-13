@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เกมจับคู่และจำแนกสื่อการอ่าน (ม.4)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.577.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      --bg-dark: #151130;
+      --ink: #f7f3ff;
+      --muted: #c6bce1;
+      --gold: #ffcf75;
+      --purple: #a879ff;
+      --green: #4ce5a5;
+      --red: #ff8297;
+      --line: #6d57a8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Kanit", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 10%, #5435a5 0, transparent 32%),
+        radial-gradient(circle at 90% 22%, #313d9b 0, transparent 36%),
+        radial-gradient(circle at 50% 95%, #43276f 0, transparent 45%),
+        var(--bg-dark);
+      background-attachment: fixed;
+    }
+    body:before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .22;
+      background-image: radial-gradient(#ddc9ff 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: linear-gradient(to bottom, black, transparent 85%);
+    }
+    button, input { font-family: "Kanit", sans-serif; }
+    button { cursor: pointer; }
+    [hidden] { display: none !important; }
+
+    .shell { max-width: 1080px; margin: auto; padding: 20px 18px 48px; position: relative; }
+
+    /* Header */
+    header {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+      background: #292050cc; border: 1px solid #765db0; border-radius: 20px; padding: 12px 18px;
+      box-shadow: 0 10px 28px #0d092850; backdrop-filter: blur(8px);
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; }
+    .brand-icon {
+      width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center;
+      background: linear-gradient(145deg, #ffbe62, #f16b8e); color: #2d1742;
+      box-shadow: 0 4px 0 #a74478;
+    }
+    .header-tag {
+      background: #463475; color: #f4dbff; border: 1px solid #8d6cc4;
+      padding: 6px 14px; border-radius: 99px; font-size: 13px;
+    }
+
+    /* Views */
+    .view { display: none; margin-top: 22px; }
+    .view.active { display: block; animation: fadeUp 0.25s ease-out; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Intro Arcade Box */
+    .intro-card {
+      border: 2px solid #8a6acf; border-radius: 32px;
+      background: radial-gradient(circle at 50% 35%, #6743b370, transparent 58%), linear-gradient(145deg, #292053, #211943);
+      box-shadow: 0 20px 0 #120e30, 0 30px 55px #0a082b88;
+      padding: 40px 22px; text-align: center; position: relative; overflow: hidden;
+    }
+    .float-emoji {
+      position: absolute; width: 68px; height: 68px; border-radius: 20px;
+      background: linear-gradient(145deg, #6549a6, #382567); border: 2px solid #a98cdd;
+      display: grid; place-items: center; font-size: 34px; box-shadow: 0 7px 0 #1c1540;
+      pointer-events: none;
+    }
+    .f1 { left: 5%; top: 14%; transform: rotate(-10deg); }
+    .f2 { right: 5%; top: 16%; transform: rotate(12deg); }
+    .f3 { left: 7%; bottom: 12%; transform: rotate(8deg); }
+    .f4 { right: 7%; bottom: 12%; transform: rotate(-9deg); }
+
+    .intro-inner { max-width: 640px; margin: auto; position: relative; z-index: 2; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #493476; border: 1px solid #a684e0; color: #ffe49b;
+      padding: 7px 16px; border-radius: 99px; font-size: 14px; font-weight: 600;
+      box-shadow: 0 4px 0 #281b4d;
+    }
+    h1 {
+      font-size: clamp(34px, 6vw, 60px); line-height: 1.15; margin: 18px 0 12px;
+      text-shadow: 0 4px 0 #402977;
+    }
+    h1 span { color: var(--gold); }
+    .instruction-text {
+      background: #1b143b; border: 1px solid #765db0; border-radius: 16px;
+      padding: 14px 18px; color: #e8defa; font-size: 15px; line-height: 1.65; margin: 16px 0 22px;
+    }
+    .instruction-text strong { color: var(--gold); }
+
+    .steps-chips { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+    .chip {
+      background: #392b66; border: 1px solid #8c70bd; padding: 9px 14px;
+      border-radius: 13px; font-size: 14px; box-shadow: 0 4px 0 #21183e;
+    }
+    .chip b {
+      display: inline-grid; place-items: center; background: var(--gold); color: #3b2252;
+      width: 22px; height: 22px; border-radius: 6px; margin-right: 6px; font-size: 13px;
+    }
+
+    .student-form {
+      background: linear-gradient(150deg, #32265f, #241c4b); border: 2px solid #745da9;
+      border-radius: 22px; padding: 22px; max-width: 500px; margin: 0 auto 20px;
+      box-shadow: 0 8px 0 #171134;
+    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; text-align: left; }
+    .form-grid label { display: grid; gap: 4px; font-size: 14px; font-weight: 500; }
+    .form-grid input {
+      background: #1d173e; border: 2px solid #8169b6; border-radius: 11px;
+      padding: 9px 12px; color: white; font-size: 15px;
+    }
+    .form-grid input:focus { outline: none; border-color: var(--gold); }
+
+    .primary-btn {
+      background: linear-gradient(180deg, #ffda78, #ffa34f); color: #3b2252;
+      border: 2px solid #ffe8ac; border-radius: 16px; padding: 13px 28px;
+      font-size: 17px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 7px 0 #af5b45, 0 14px 22px #09071c77; transition: transform .12s;
+    }
+    .primary-btn:hover:not(:disabled) { transform: translateY(-2px); }
+    .primary-btn:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 3px 0 #af5b45; }
+    .primary-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Game Stats */
+    .stats-bar { display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 12px; margin-bottom: 18px; }
+    .stat-box {
+      background: linear-gradient(150deg, #32265f, #241c4b); border: 2px solid #745da9;
+      border-radius: 16px; padding: 12px 16px; box-shadow: 0 7px 0 #171134;
+    }
+    .stat-box span { display: block; font-size: 13px; color: var(--muted); }
+    .stat-box strong { font-size: 22px; color: #ffdc83; }
+    .track { height: 12px; border-radius: 99px; background: #171337; border: 1px solid #7d69ad; overflow: hidden; margin-top: 6px; }
+    .fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ffb769, #ffdf7b); transition: width .35s ease; }
+
+    /* Game Board */
+    .board { display: grid; grid-template-columns: 1fr 1.15fr; gap: 20px; align-items: start; }
+    .board-panel {
+      background: linear-gradient(150deg, #32265f, #241c4b); border: 2px solid #745da9;
+      border-radius: 24px; padding: 22px; box-shadow: 0 9px 0 #171134;
+    }
+    .panel-header {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      margin-bottom: 14px; font-weight: 700; font-size: 17px; color: var(--gold);
+    }
+    .media-frame {
+      border: 2px dashed #be9bf2; border-radius: 18px; overflow: hidden;
+      background: #1d153d; position: relative;
+    }
+    .media-frame img {
+      width: 100%; height: 240px; object-fit: cover; display: block;
+    }
+    .media-caption {
+      padding: 16px; text-align: center;
+      background: radial-gradient(circle at 50% 50%, #58439a, #362866);
+    }
+    .media-caption h2 { margin: 0; font-size: clamp(22px, 3vw, 28px); color: #fff3c8; }
+
+    .step-block { margin-bottom: 20px; }
+    .step-label {
+      font-size: 16px; font-weight: 600; color: #ffdf8c; margin: 0 0 10px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .step-num {
+      background: var(--gold); color: #3b2252; width: 24px; height: 24px; border-radius: 7px;
+      display: inline-grid; place-items: center; font-size: 14px; font-weight: 700;
+    }
+
+    .choices-grid { display: grid; gap: 10px; }
+    .choice-card {
+      width: 100%; text-align: left; padding: 13px 16px; border-radius: 14px;
+      background: #3b2d70; border: 2px solid #8c70bd; color: #fff8e8;
+      font-size: 15px; font-weight: 500; box-shadow: 0 4px 0 #1e1640; transition: all .15s;
+    }
+    .choice-card:hover:not(:disabled) { border-color: #ffdb84; transform: translateY(-2px); }
+    .choice-card.selected { border-color: #ffdc83; background: #7050a5; box-shadow: 0 0 0 3px #ffdc8370; }
+    .choice-card.correct { border-color: var(--green); background: #1e634b; }
+    .choice-card.wrong { border-color: var(--red); background: #6e263b; }
+
+    .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .type-card {
+      padding: 13px; border-radius: 14px; background: #3b2d70; border: 2px solid #8c70bd;
+      color: #fff8e8; font-size: 15px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 4px 0 #1e1640; transition: all .15s;
+    }
+    .type-card:hover:not(:disabled) { border-color: #ffdb84; transform: translateY(-2px); }
+    .type-card.selected { border-color: #ffdc83; background: #7050a5; box-shadow: 0 0 0 3px #ffdc8370; }
+    .type-card.correct { border-color: var(--green); background: #1e634b; }
+    .type-card.wrong { border-color: var(--red); background: #6e263b; }
+
+    .feedback-banner {
+      margin-top: 14px; padding: 14px; border-radius: 14px;
+      background: #1a1438; border: 1px solid #9678e0; font-size: 15px; line-height: 1.6;
+    }
+
+    /* Result Card */
+    .result-card {
+      max-width: 660px; margin: auto; text-align: center;
+      background: linear-gradient(150deg, #32265f, #241c4b); border: 2px solid #745da9;
+      border-radius: 28px; padding: 36px 26px; box-shadow: 0 12px 0 #171134;
+    }
+    .trophy-box {
+      width: 90px; height: 90px; border-radius: 24px; background: #6650a5;
+      border: 2px solid #e3b976; display: grid; place-items: center; font-size: 48px;
+      margin: 0 auto 14px; box-shadow: 0 6px 0 #35245f;
+    }
+    .result-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
+    .res-stat { background: #3b2d70; border: 1px solid #7054a8; border-radius: 15px; padding: 14px 8px; }
+    .res-stat strong { display: block; font-size: 26px; color: #ffdc83; }
+    .res-stat span { font-size: 13px; color: #cfc3e7; }
+
+    .summary-list {
+      list-style: none; padding: 0; margin: 16px 0; text-align: left;
+      max-height: 300px; overflow-y: auto; display: grid; gap: 8px;
+    }
+    .summary-list li {
+      background: #231b47; border: 1px solid #624e9a; border-radius: 12px;
+      padding: 10px 14px; font-size: 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    }
+
+    @media (max-width: 760px) {
+      .board, .stats-bar, .form-grid, .type-grid, .result-stats { grid-template-columns: 1fr; }
+      .float-emoji { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div class="brand">
+      <span class="brand-icon"><i data-lucide="sparkles"></i></span>
+      <span>เกมจับคู่และจำแนกสื่อการอ่าน (ม.4)</span>
+    </div>
+    <span class="header-tag">ภารกิจ 20 ชนิดสื่อ ✨</span>
+  </header>
+
+  <!-- 1. หน้าเริ่มต้น -->
+  <section id="view-start" class="view active">
+    <div class="intro-card">
+      <span class="float-emoji f1" aria-hidden="true">📰</span>
+      <span class="float-emoji f2" aria-hidden="true">📱</span>
+      <span class="float-emoji f3" aria-hidden="true">📚</span>
+      <span class="float-emoji f4" aria-hidden="true">💻</span>
+
+      <div class="intro-inner">
+        <span class="eyebrow">🎯 พร้อมทดสอบความรู้เรื่องสื่อการอ่านแล้วหรือยัง?</span>
+        <h1>จับคู่ลักษณะ<span>& จำแนกสื่อ!</span></h1>
+
+        <div class="instruction-text">
+          <strong>คำชี้แจง:</strong> ให้นักเรียนพิจารณาตัวอย่างสื่อการอ่านทั้ง 20 ชนิด แล้วจับคู่ลักษณะเด่นของสื่อ พร้อมจำแนกว่าเป็น <strong>สื่อสิ่งพิมพ์</strong> หรือ <strong>สื่ออิเล็กทรอนิกส์</strong> ให้ถูกต้อง
+        </div>
+
+        <div class="steps-chips">
+          <span class="chip"><b>1</b> ดูภาพและชื่อสื่อ</span>
+          <span class="chip"><b>2</b> จับคู่ลักษณะสำคัญ</span>
+          <span class="chip"><b>3</b> เลือกประเภทสื่อ</span>
+        </div>
+
+        <form id="start-form" class="student-form">
+          <p style="margin: 0 0 14px; font-weight: 600; color: var(--gold);">🎓 กรอกข้อมูลผู้เล่นก่อนเริ่มเกม</p>
+          <div class="form-grid">
+            <label>ชื่อ <input id="in-first" required placeholder="กรอกชื่อจริง"></label>
+            <label>นามสกุล <input id="in-last" required placeholder="กรอกนามสกุล"></label>
+            <label>เลขที่ <input id="in-number" required inputmode="numeric" pattern="[0-9]+" placeholder="เช่น 12"></label>
+            <label>ห้อง <input id="in-room" required placeholder="เช่น ม.4/1"></label>
+          </div>
+          <button type="submit" class="primary-btn" style="width: 100%; margin-top: 18px;">
+            เริ่มทำภารกิจ 20 ข้อ <i data-lucide="arrow-right"></i>
+          </button>
+        </form>
+        <p id="resume-hint" style="color: var(--gold); font-size: 14px; margin: 0;"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. หน้าเล่นเกม -->
+  <section id="view-game" class="view">
+    <div class="stats-bar">
+      <div class="stat-box">
+        <span>⭐ คะแนนสะสม (เต็ม 400)</span>
+        <strong id="stat-score">0</strong>
+      </div>
+      <div class="stat-box">
+        <span>✅ ตอบแล้ว</span>
+        <strong id="stat-count">0 / 20</strong>
+      </div>
+      <div class="stat-box">
+        <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--muted);">
+          <span id="player-label">ผู้เล่น</span>
+          <strong id="stat-percent" style="font-size:14px;">0%</strong>
+        </div>
+        <div class="track"><div id="progress-fill" class="fill"></div></div>
+      </div>
+    </div>
+
+    <div class="board">
+      <!-- ฝั่งซ้าย: ภาพและชื่อสื่อ -->
+      <div class="board-panel">
+        <div class="panel-header">
+          <span>สื่อที่ต้องวิเคราะห์</span>
+          <span id="q-tag" class="header-tag">ข้อ 1 / 20</span>
+        </div>
+        <div class="media-frame">
+          <img id="q-image" src="" alt="ภาพประกอบสื่อการอ่าน">
+          <div class="media-caption">
+            <h2 id="q-title">หนังสือพิมพ์</h2>
+          </div>
+        </div>
+        <div id="feedback-box" class="feedback-banner" hidden></div>
+      </div>
+
+      <!-- ฝั่งขวา: เลือกคำตอบ 2 ขั้นตอน -->
+      <div class="board-panel">
+        <div class="step-block">
+          <p class="step-label"><span class="step-num">1</span> เลือกลักษณะสำคัญที่ตรงกับสื่อ (+10 คะแนน)</p>
+          <div id="choices-container" class="choices-grid"></div>
+        </div>
+
+        <div class="step-block">
+          <p class="step-label"><span class="step-num">2</span> จำแนกประเภทของสื่อ (+10 คะแนน)</p>
+          <div class="type-grid">
+            <button type="button" class="type-card" data-type="สื่อสิ่งพิมพ์"><i data-lucide="book-open"></i> สื่อสิ่งพิมพ์</button>
+            <button type="button" class="type-card" data-type="สื่ออิเล็กทรอนิกส์"><i data-lucide="monitor-smartphone"></i> สื่ออิเล็กทรอนิกส์</button>
+          </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+          <button id="submit-btn" type="button" class="primary-btn" style="width: 100%;" disabled>
+            ส่งคำตอบข้อนี้ <i data-lucide="check-circle"></i>
+          </button>
+          <button id="next-btn" type="button" class="primary-btn" style="width: 100%;" hidden>
+            ไปข้อถัดไป <i data-lucide="arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. หน้าสรุปผล -->
+  <section id="view-result" class="view">
+    <div class="result-card">
+      <div class="trophy-box">🏆</div>
+      <h2 style="font-size: 32px; margin: 0 0 6px; color: var(--gold);">สรุปผลการทำกิจกรรม</h2>
+      <p id="res-student" style="color: var(--muted); margin: 0 0 12px;"></p>
+      <p id="res-sync-msg" style="font-size: 14px; font-weight: 600; margin: 0;"></p>
+
+      <div class="result-stats">
+        <div class="res-stat"><strong id="res-total">0 / 400</strong><span>คะแนนรวม</span></div>
+        <div class="res-stat"><strong id="res-match">0 / 20</strong><span>จับคู่ลักษณะถูก</span></div>
+        <div class="res-stat"><strong id="res-type">0 / 20</strong><span>จำแนกประเภทถูก</span></div>
+      </div>
+
+      <h3 style="text-align: left; color: var(--gold); font-size: 16px; margin-bottom: 8px;">รายละเอียดคะแนนแต่ละข้อ</h3>
+      <ul id="res-list" class="summary-list"></ul>
+
+      <p style="font-size: 13px; color: var(--muted); margin-top: 14px;">แคปหน้าจอสรุปผลนี้ไว้เป็นหลักฐานการส่งงานได้เลย 📸</p>
+    </div>
+  </section>
+</div>
+
+<script>
+  // ลิงก์ Web App URL จาก Google Apps Script ของคุณครู
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxLdgJrempu2r07-rD1-8LnisU1_VEPCv3mMWokY_W0E0uRLqfUXPtJ0BEYvk8mNjsF/exec";
+
+  // คลังสื่อการอ่าน 20 ชนิด (สื่อสิ่งพิมพ์ 10 ชนิด + สื่ออิเล็กทรอนิกส์ 10 ชนิด)
+  const MEDIA_ITEMS = [
+    // สื่อสิ่งพิมพ์ (1-10)
+    { id: 1, name: "หนังสือพิมพ์", type: "สื่อสิ่งพิมพ์", desc: "นำเสนอข่าวสารและเหตุการณ์ต่าง ๆ", img: "https://images.pexels.com/photos/3866816/pexels-photo-3866816.jpeg?auto=compress&cs=tinysrgb&w=800" },
+    { id: 2, name: "นิตยสาร", type: "สื่อสิ่งพิมพ์", desc: "นำเสนอสาระและเรื่องราวเฉพาะด้าน", img: "https://images.pexels.com/photos/4271624/pexels-photo-4271624.jpeg?auto=compress&cs=tinysrgb&w=800" },
+    { id: 3, name: "หนังสือเรียน", type: "สื่อสิ่งพิมพ์", desc: "ใช้ประกอบการเรียนรู้ในรายวิชา", img: "https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=800" },
+    { id: 4, name: "หนังสือนวนิยาย", type: "สื่อสิ่งพิมพ์", desc: "นำเสนอเรื่องราวและความบันเทิง", img: "https://images.pexels.com/photos/8236200/pexels-photo-8236200.jpeg?auto=compress&cs=tinysrgb&w=800" },
+    { id: 5, name: "หนังสือการ์ตูน", type: "สื่อสิ่งพิมพ์", desc: "เล่าเรื่องผ่านภาพและข้อความ", img: "https://images.pexels.com/photos/7809123/pexels-photo-7809123.jpeg?auto=compress&cs=tinysrgb&w=800" },
+    { id: 6, name: "แผ่นพับ", type: "สื่อสิ่งพิมพ์", desc: "ให้ข้อมูลหรือประชาสัมพันธ์", img: "https://images.pexels.com/photos/6565757/pexels-photo-6565757.jpeg?auto=compress&cs=tinysrgb&w=800" },
+    { id: 7, name: "โปสเตอร์", type: "สื่อสิ่งพิมพ์", desc: "สื่อสารข้อมูลด้วยข้อความและภาพ", img: "https://images.pexels.com/photos/1037995/pexels-photo-1037995.jpeg?auto=compress&cs=tinysrgb&w=800" },
+    { id: 8, name: "สารานุกรม", type: "สื่อสิ่งพิมพ์", desc: "รวบรวมความรู้ในเรื่องต่าง ๆ", img: "https://images.pexels.com/photos/256455/pexels-photo-256455.jpeg?auto=compress&cs=tinysrgb&w=800" },
+    { id: 9, name: "วารสารวิชาการ", type: "สื่อสิ่งพิมพ์", desc: "เผยแพร่บทความและผลงานทางวิชาการ", img: "https://images.pexels.com/photos/590493/pexels-photo-590493.jpeg?auto=compress&cs=tinysrgb&w=800" },
+    { id: 10, name: "หนังสือคู่มือ", type: "สื่อสิ่งพิมพ์", desc: "แนะนำวิธีการหรือขั้นตอนการปฏิบัติ", img: "https://images.pexels.com/photos/416405/pexels-photo-416405.jpeg?auto=compress&cs=tinysrgb&w=800" },
+
+    // สื่ออิเล็กทรอนิกส์ (11-20)
+    { id: 11, name: "หนังสืออิเล็กทรอนิกส์ (E-book)", type: "สื่ออิเล็กทรอนิกส์", desc: "หนังสือที่อ่านผ่านอุปกรณ์อิเล็กทรอนิกส์", img: "https://images.pexels.com/photos/8546475/pexels-photo-8546475.jpeg?auto=compress&cs=tinysrgb&w=800" },
+    { id: 12, name: "เว็บไซต์ข่าว", type: "สื่ออิเล็กทรอนิกส์", desc: "นำเสนอข่าวสารผ่านเว็บไซต์", img: "https://images.pexels.com/photos/177557/pexels-photo-177557.jpeg?auto=compress&cs=tinysrgb&w=800" },
+    { id: 13, name: "บทความออนไลน์", type: "สื่ออิเล็กทรอนิกส์", desc: "เผยแพร่เนื้อหาความรู้ผ่านอินเทอร์เน็ต", img: "https://images.pexels.com/photos/261662/pexels-photo-261662.jpeg?auto=compress&cs=tinysrgb&w=800" },
+    { id: 14, name: "นิตยสารออนไลน์", type: "สื่ออิเล็กทรอนิกส์", desc: "นิตยสารที่อ่านผ่านสื่อดิจิทัล", img: "https://images.pexels.com/photos/5082579/pexels-photo-5082579.jpeg?auto=compress&cs=tinysrgb&w=800" },
+    { id: 15, name: "เอกสาร PDF", type: "สื่ออิเล็กทรอนิกส์", desc: "เอกสารดิจิทัลที่เปิดอ่านผ่านอุปกรณ์", img: "https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=800" },
+    { id: 16, name: "บล็อก (Blog)", type: "สื่ออิเล็กทรอนิกส์", desc: "พื้นที่เผยแพร่เรื่องราวและความคิดเห็น", img: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=800" },
+    { id: 17, name: "สารานุกรมออนไลน์", type: "สื่ออิเล็กทรอนิกส์", desc: "แหล่งรวบรวมความรู้ผ่านเว็บไซต์", img: "https://images.pexels.com/photos/4050315/pexels-photo-4050315.jpeg?auto=compress&cs=tinysrgb&w=800" },
+    { id: 18, name: "อินโฟกราฟิกออนไลน์", type: "สื่ออิเล็กทรอนิกส์", desc: "นำเสนอข้อมูลด้วยภาพและข้อความ", img: "https://images.pexels.com/photos/669615/pexels-photo-669615.jpeg?auto=compress&cs=tinysrgb&w=800" },
+    { id: 19, name: "วารสารวิชาการออนไลน์", type: "สื่ออิเล็กทรอนิกส์", desc: "เผยแพร่บทความวิชาการในรูปแบบดิจิทัล", img: "https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=800" },
+    { id: 20, name: "ห้องสมุดดิจิทัล", type: "สื่ออิเล็กทรอนิกส์", desc: "รวบรวมหนังสือและเอกสารให้อ่านผ่านระบบออนไลน์", img: "https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=800" }
+  ];
+
+  const SAVE_KEY = "student_media_game_m4_v1";
+  let state = null;
+  let pickedDesc = null;
+  let pickedType = null;
+  let locked = false;
+
+  const $ = id => document.getElementById(id);
+
+  // ฟังก์ชันสลับลำดับแบบ Fisher-Yates
+  function shuffle(list) {
+    const arr = [...list];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function showView(id) {
+    document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.id === id));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // ตรวจสอบความคืบหน้าที่เล่นค้างไว้ในเครื่อง
+  const savedRaw = localStorage.getItem(SAVE_KEY);
+  if (savedRaw) {
+    try {
+      const parsed = JSON.parse(savedRaw);
+      if (parsed && Array.isArray(parsed.answers) && parsed.answers.length < MEDIA_ITEMS.length) {
+        $("resume-hint").textContent = `พบความคืบหน้าของ ${parsed.student.first} ${parsed.student.last} (${parsed.answers.length}/20 ข้อ) — กรอกข้อมูลเดิมเพื่อเล่นต่อได้เลย`;
+      }
+    } catch (_) {}
+  }
+
+  // เริ่มเกมหรือกู้คืนเกมเดิม
+  $("start-form").addEventListener("submit", e => {
+    e.preventDefault();
+    const student = {
+      first: $("in-first").value.trim(),
+      last: $("in-last").value.trim(),
+      number: $("in-number").value.trim(),
+      room: $("in-room").value.trim()
+    };
+
+    const currentSaved = localStorage.getItem(SAVE_KEY);
+    if (currentSaved) {
+      try {
+        const parsed = JSON.parse(currentSaved);
+        if (
+          parsed.student.first === student.first &&
+          parsed.student.last === student.last &&
+          parsed.student.number === student.number &&
+          parsed.student.room === student.room &&
+          parsed.answers.length < MEDIA_ITEMS.length
+        ) {
+          state = parsed;
+          renderQuestion();
+          return;
+        }
+      } catch (_) {}
+    }
+
+    // สุ่มลำดับข้อทั้ง 20 ข้อ และสุ่มตัวเลือก 4 ข้อในแต่ละข้อ
+    const randomizedQuestions = shuffle(MEDIA_ITEMS).map(item => {
+      const distractors = shuffle(MEDIA_ITEMS.filter(m => m.id !== item.id && m.desc !== item.desc))
+        .slice(0, 3)
+        .map(m => m.desc);
+      return {
+        ...item,
+        choices: shuffle([item.desc, ...distractors])
+      };
+    });
+
+    state = { student, questions: randomizedQuestions, answers: [] };
+    localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+    renderQuestion();
+  });
+
+  // แสดงโจทย์ข้อปัจจุบัน
+  function renderQuestion() {
+    if (state.answers.length >= state.questions.length) {
+      finishGame();
+      return;
+    }
+
+    const idx = state.answers.length;
+    const total = state.questions.length;
+    const q = state.questions[idx];
+
+    pickedDesc = null;
+    pickedType = null;
+    locked = false;
+
+    const currentScore = state.answers.reduce((sum, a) => sum + (a.matchOk ? 10 : 0) + (a.typeOk ? 10 : 0), 0);
+    const pct = Math.round((idx / total) * 100);
+
+    $("stat-score").textContent = currentScore;
+    $("stat-count").textContent = `${idx} / ${total}`;
+    $("stat-percent").textContent = `${pct}%`;
+    $("progress-fill").style.width = `${pct}%`;
+    $("player-label").textContent = `${state.student.first} (${state.student.room})`;
+
+    $("q-tag").textContent = `ข้อ ${idx + 1} / ${total}`;
+    $("q-title").textContent = q.name;
+    $("q-image").src = q.img;
+    $("q-image").alt = q.name;
+    $("q-image").onerror = () => {
+      $("q-image").onerror = null;
+      $("q-image").src = "https://placehold.co/800x400/292053/ffcf75?text=" + encodeURIComponent(q.name);
+    };
+
+    $("feedback-box").hidden = true;
+
+    const container = $("choices-container");
+    container.replaceChildren();
+    q.choices.forEach((text, i) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "choice-card";
+      btn.dataset.desc = text;
+      btn.textContent = `${i + 1}. ${text}`;
+      btn.addEventListener("click", () => {
+        if (locked) return;
+        pickedDesc = text;
+        container.querySelectorAll(".choice-card").forEach(b => b.classList.toggle("selected", b === btn));
+        checkReady();
+      });
+      container.appendChild(btn);
+    });
+
+    document.querySelectorAll(".type-card").forEach(btn => {
+      btn.className = "type-card";
+      btn.disabled = false;
+    });
+
+    $("submit-btn").hidden = false;
+    $("submit-btn").disabled = true;
+    $("next-btn").hidden = true;
+
+    lucide.createIcons();
+    showView("view-game");
+  }
+
+  document.querySelectorAll(".type-card").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (locked) return;
+      pickedType = btn.dataset.type;
+      document.querySelectorAll(".type-card").forEach(b => b.classList.toggle("selected", b === btn));
+      checkReady();
+    });
+  });
+
+  function checkReady() {
+    $("submit-btn").disabled = !(pickedDesc && pickedType);
+  }
+
+  // ตรวจคำตอบข้อปัจจุบันและแสดงเฉลยทันที
+  $("submit-btn").addEventListener("click", () => {
+    if (locked) return;
+    locked = true;
+
+    const idx = state.answers.length;
+    const q = state.questions[idx];
+    const matchOk = pickedDesc === q.desc;
+    const typeOk = pickedType === q.type;
+
+    $("choices-container").querySelectorAll(".choice-card").forEach(btn => {
+      btn.disabled = true;
+      const val = btn.dataset.desc;
+      if (val === q.desc) btn.classList.add("correct");
+      else if (val === pickedDesc && !matchOk) btn.classList.add("wrong");
+    });
+
+    document.querySelectorAll(".type-card").forEach(btn => {
+      btn.disabled = true;
+      if (btn.dataset.type === q.type) btn.classList.add("correct");
+      else if (btn.dataset.type === pickedType && !typeOk) btn.classList.add("wrong");
+    });
+
+    state.answers.push({
+      name: q.name,
+      matchOk,
+      typeOk,
+      correctDesc: q.desc,
+      correctType: q.type
+    });
+    localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+
+    const earned = (matchOk ? 10 : 0) + (typeOk ? 10 : 0);
+    const newScore = state.answers.reduce((sum, a) => sum + (a.matchOk ? 10 : 0) + (a.typeOk ? 10 : 0), 0);
+    const pct = Math.round((state.answers.length / state.questions.length) * 100);
+
+    $("stat-score").textContent = newScore;
+    $("stat-count").textContent = `${state.answers.length} / ${state.questions.length}`;
+    $("stat-percent").textContent = `${pct}%`;
+    $("progress-fill").style.width = `${pct}%`;
+
+    const fb = $("feedback-box");
+    fb.hidden = false;
+    fb.innerHTML = `
+      <div style="font-weight:700; color: var(--gold); margin-bottom:4px;">ได้รับ +${earned} คะแนน!</div>
+      <div>• ลักษณะเด่น: ${matchOk ? '<span style="color:var(--green)">ถูกต้อง</span>' : '<span style="color:var(--red)">ไม่ถูกต้อง</span>'} (เฉลย: ${q.desc})</div>
+      <div>• ประเภทสื่อ: ${typeOk ? '<span style="color:var(--green)">ถูกต้อง</span>' : '<span style="color:var(--red)">ไม่ถูกต้อง</span>'} (เฉลย: <b>${q.type}</b>)</div>
+    `;
+
+    $("submit-btn").hidden = true;
+    $("next-btn").hidden = false;
+    $("next-btn").textContent = idx === state.questions.length - 1 ? "ดูสรุปคะแนนรวม 🏆" : "ไปข้อถัดไป";
+  });
+
+  $("next-btn").addEventListener("click", renderQuestion);
+
+  // สรุปผลและส่งคะแนนไปยัง Google Sheets
+  async function finishGame() {
+    const matchCount = state.answers.filter(a => a.matchOk).length;
+    const typeCount = state.answers.filter(a => a.typeOk).length;
+    const totalScore = (matchCount + typeCount) * 10;
+
+    $("res-student").textContent = `${state.student.first} ${state.student.last} · เลขที่ ${state.student.number} · ห้อง ${state.student.room}`;
+    $("res-total").textContent = `${totalScore} / 400`;
+    $("res-match").textContent = `${matchCount} / 20`;
+    $("res-type").textContent = `${typeCount} / 20`;
+
+    const list = $("res-list");
+    list.replaceChildren();
+    state.answers.forEach((a, i) => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <span><b>${i + 1}. ${a.name}</b> (${a.correctType})</span>
+        <span>ลักษณะ ${a.matchOk ? '✅' : '❌'} · ประเภท ${a.typeOk ? '✅' : '❌'}</span>
+      `;
+      list.appendChild(li);
+    });
+
+    showView("view-result");
+    localStorage.removeItem(SAVE_KEY);
+
+    if (GOOGLE_SCRIPT_URL) {
+      $("res-sync-msg").style.color = "var(--gold)";
+      $("res-sync-msg").textContent = "⏳ กำลังส่งคะแนนไปยังระบบของคุณครู...";
+      try {
+        const res = await fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "save_score",
+            score: {
+              first_name: state.student.first,
+              last_name: state.student.last,
+              student_number: state.student.number,
+              classroom: state.student.room,
+              match_score: matchCount * 10,
+              type_score: typeCount * 10,
+              total_score: totalScore,
+              submitted_at: new Date().toLocaleString("th-TH")
+            }
+          })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          $("res-sync-msg").style.color = "var(--green)";
+          $("res-sync-msg").textContent = "✅ ส่งคะแนนเข้า Google Sheets เรียบร้อยแล้ว!";
+        } else {
+          throw new Error("Server error");
+        }
+      } catch (_) {
+        $("res-sync-msg").style.color = "var(--red)";
+        $("res-sync-msg").textContent = "⚠️ ส่งคะแนนอัตโนมัติไม่สำเร็จ กรุณาแคปหน้าจอนี้ส่งคุณครู";
+      }
+    }
+  }
+
+  lucide.createIcons();
+</script>
+</body>
+</html>
