@@ -1,0 +1,2069 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ภารกิจวิเคราะห์สื่อการอ่าน (ม.4) - 20 ชนิดสื่อ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --bg-base: #171332;
+      --ink: #f7f3ff;
+      --muted: #c6bce1;
+      --purple: #a879ff;
+      --purple-dark: #745da9;
+      --gold: #ffcf75;
+      --gold-bright: #ffdf8c;
+      --green: #4ce5a5;
+      --red: #ff8297;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Kanit", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 10%, #5435a5 0, transparent 32%),
+        radial-gradient(circle at 90% 22%, #313d9b 0, transparent 36%),
+        radial-gradient(circle at 50% 95%, #43276f 0, transparent 46%),
+        var(--bg-base);
+      background-attachment: fixed;
+      overflow-x: hidden;
+    }
+
+    /* ลายจุดดาวพื้นหลังสไตล์ Arcade */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.24;
+      background-image: radial-gradient(#ddc9ff 1.2px, transparent 1.2px);
+      background-size: 28px 28px;
+      mask-image: linear-gradient(to bottom, black 40%, transparent 95%);
+      z-index: 0;
+    }
+
+    button, input, select, textarea { font-family: "Kanit", sans-serif; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid #ff9a38;
+      outline-offset: 2px;
+    }
+    [hidden] { display: none !important; }
+
+    .shell {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 20px 18px 54px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* แถบเมนูด้านบน */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      background: #292050dd;
+      border: 1px solid #765db0;
+      border-radius: 22px;
+      padding: 12px 18px;
+      box-shadow: 0 12px 30px #0d092850;
+      backdrop-filter: blur(10px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 13px;
+      background: linear-gradient(145deg, #ffbe62, #f16b8e);
+      color: #2f1847;
+      display: grid;
+      place-items: center;
+      transform: rotate(-6deg);
+      box-shadow: 0 4px 0 #a74478, 0 8px 18px #f1788a55;
+      flex-shrink: 0;
+    }
+
+    .brand-icon svg { transform: rotate(6deg); }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: auto;
+      flex-wrap: wrap;
+    }
+
+    .pill-tag {
+      background: #463475;
+      color: #f4dbff;
+      border: 1px solid #8d6cc4;
+      padding: 6px 14px;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sync-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ffcf75;
+    }
+    .sync-dot.online { background: var(--green); box-shadow: 0 0 8px var(--green); }
+
+    .btn-teacher {
+      background: #463475;
+      color: #fff3c8;
+      border: 1px solid #a684e0;
+      border-radius: 12px;
+      padding: 8px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 0 4px 0 #261a4a;
+      transition: transform 0.12s, background 0.15s;
+    }
+    .btn-teacher:hover { background: #584191; transform: translateY(-1px); }
+    .btn-teacher:active { transform: translateY(2px); box-shadow: 0 1px 0 #261a4a; }
+
+    /* Views */
+    .view { display: none; margin-top: 24px; }
+    .view.active { display: block; animation: fadeUp 0.3s ease-out; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* การ์ดหลักสไตล์ Arcade */
+    .arcade-card {
+      background: linear-gradient(150deg, #32265f, #241c4b);
+      border: 2px solid var(--purple-dark);
+      border-radius: 26px;
+      padding: 24px;
+      box-shadow: 0 9px 0 #171134, 0 19px 34px #09071f88;
+    }
+
+    /* ปุ่ม 3D สีเหลืองทอง */
+    .btn-gold {
+      border: 2px solid #ffe8ac;
+      background: linear-gradient(180deg, #ffda78, #ffa34f);
+      color: #3b2252;
+      border-radius: 16px;
+      padding: 13px 26px;
+      font-size: 17px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      box-shadow: 0 7px 0 #af5b45, 0 14px 24px #09071c77;
+      transition: transform 0.12s, box-shadow 0.12s;
+    }
+    .btn-gold:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 9px 0 #af5b45, 0 18px 28px #09071c88;
+    }
+    .btn-gold:active:not(:disabled) {
+      transform: translateY(4px);
+      box-shadow: 0 3px 0 #af5b45;
+    }
+    .btn-gold:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      box-shadow: 0 4px 0 #5b3b4e;
+    }
+
+    .btn-secondary {
+      border: 1px solid #9c7cd9;
+      background: #463475;
+      color: #fff3c8;
+      border-radius: 15px;
+      padding: 13px 22px;
+      font-size: 16px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 6px 0 #231845;
+      transition: transform 0.12s;
+    }
+    .btn-secondary:hover { background: #56408f; transform: translateY(-2px); }
+    .btn-secondary:active { transform: translateY(3px); box-shadow: 0 2px 0 #231845; }
+
+    /* =========================================================================
+       1. หน้าแรก (Intro View)
+    ========================================================================= */
+    .intro-stage {
+      min-height: 600px;
+      border: 2px solid #8a6acf;
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 50% 30%, #6743b370, transparent 58%),
+        linear-gradient(145deg, #292053, #211943);
+      box-shadow: 0 20px 0 #120e30, 0 32px 56px #0a082b88;
+      padding: 40px 20px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    /* ดาวตกแต่ง ✦ */
+    .intro-stage::before, .intro-stage::after {
+      content: '✦';
+      position: absolute;
+      pointer-events: none;
+      animation: twinkle 3s infinite ease-in-out alternate;
+    }
+    .intro-stage::before { top: 10%; left: 22%; font-size: 30px; color: #ffcd75; }
+    .intro-stage::after { bottom: 12%; right: 20%; font-size: 24px; color: #88e8ec; animation-delay: 1.2s; }
+
+    @keyframes twinkle {
+      from { opacity: 0.45; transform: scale(0.9) rotate(0deg); }
+      to { opacity: 1; transform: scale(1.15) rotate(15deg); }
+    }
+
+    /* ไอคอนลอยตัว 4 มุม */
+    .float-badge {
+      position: absolute;
+      width: 78px;
+      height: 78px;
+      border-radius: 22px;
+      background: linear-gradient(145deg, #6549a6, #382567);
+      border: 2px solid #a98cdd;
+      box-shadow: 0 8px 0 #1c1540, 0 16px 28px #09071e99;
+      display: grid;
+      place-items: center;
+      font-size: 38px;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .float-1 { left: 5%; top: 14%; transform: rotate(-12deg); }
+    .float-2 { right: 5%; top: 16%; transform: rotate(13deg); }
+    .float-3 { left: 7%; bottom: 13%; transform: rotate(10deg); }
+    .float-4 { right: 7%; bottom: 13%; transform: rotate(-10deg); }
+
+    .intro-inner {
+      max-width: 680px;
+      width: 100%;
+      position: relative;
+      z-index: 2;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #493476;
+      border: 1px solid #a684e0;
+      color: #ffe49b;
+      padding: 7px 16px;
+      border-radius: 99px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 4px 0 #281b4d;
+    }
+
+    .hero-title {
+      font-size: clamp(34px, 5.5vw, 58px);
+      line-height: 1.16;
+      margin: 18px 0 14px;
+      text-shadow: 0 4px 0 #402977, 0 10px 25px #0b072b;
+    }
+    .hero-title span { color: var(--gold); }
+
+    .instruction-card {
+      background: #1d163d;
+      border: 1px solid #7d63bd;
+      border-radius: 18px;
+      padding: 15px 18px;
+      margin: 0 auto 20px;
+      text-align: left;
+      font-size: 15px;
+      line-height: 1.65;
+      color: #e9defa;
+    }
+    .instruction-card strong { color: var(--gold-bright); }
+
+    .steps-pills {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .step-pill {
+      background: #392b66;
+      border: 1px solid #8c70bd;
+      padding: 9px 15px;
+      border-radius: 14px;
+      color: #e9defa;
+      font-size: 14px;
+      box-shadow: 0 5px 0 #21183e;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-pill b {
+      display: inline-grid;
+      place-items: center;
+      background: #ffcb71;
+      color: #40265f;
+      border-radius: 7px;
+      width: 23px;
+      height: 23px;
+      font-size: 13px;
+    }
+
+    .player-form {
+      background: #1f1842;
+      border: 1px solid #745da9;
+      border-radius: 22px;
+      padding: 20px;
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .field-group label {
+      display: block;
+      font-size: 13px;
+      color: #ded4f2;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    .arcade-input, .arcade-select {
+      width: 100%;
+      background: #14102b;
+      border: 2px solid #8169b6;
+      border-radius: 12px;
+      padding: 10px 13px;
+      color: #fff8e8;
+      font-size: 15px;
+      transition: border-color 0.15s;
+    }
+    .arcade-input::placeholder { color: #8c7db0; }
+    .arcade-input:focus, .arcade-select:focus { border-color: var(--gold); outline: none; }
+
+    /* =========================================================================
+       2. หน้าเล่นเกม (Game View)
+    ========================================================================= */
+    .hud-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr 1.6fr;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .hud-card {
+      background: linear-gradient(150deg, #32265f, #241c4b);
+      border: 2px solid var(--purple-dark);
+      border-radius: 18px;
+      padding: 14px 18px;
+      box-shadow: 0 7px 0 #171134;
+    }
+
+    .hud-label { font-size: 13px; color: var(--muted); display: block; }
+    .hud-value { font-size: 21px; font-weight: 700; color: var(--gold-bright); }
+
+    .progress-track {
+      height: 12px;
+      border-radius: 99px;
+      background: #171337;
+      border: 1px solid #7d69ad;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ffb769, #ffdf7b);
+      box-shadow: 0 0 12px #ffca75;
+      border-radius: 99px;
+      transition: width 0.35s ease;
+    }
+
+    .board-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.18fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .panel-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #fff3c8;
+    }
+
+    .badge-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      background: #694aa4;
+      color: #ffe19a;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 3px 0 #352156;
+    }
+
+    /* การ์ดรูปภาพและชื่อสื่อฝั่งซ้าย */
+    .media-frame {
+      background: radial-gradient(circle at 50% 40%, #58439a, #362866);
+      border: 2px dashed #be9bf2;
+      border-radius: 20px;
+      padding: 16px;
+      text-align: center;
+      box-shadow: inset 0 0 25px #1d143b80;
+    }
+
+    .media-img-wrap {
+      width: 100%;
+      height: 240px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #1b1438;
+      border: 2px solid #8e70c9;
+      margin-bottom: 14px;
+      position: relative;
+    }
+
+    .media-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .media-name {
+      font-size: clamp(24px, 3.5vw, 32px);
+      font-weight: 700;
+      color: #fff3c8;
+      text-shadow: 0 3px 0 #35235b;
+      margin: 0 0 4px;
+    }
+
+    /* ตัวเลือกขั้นที่ 1 */
+    .choice-stack {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .choice-item {
+      width: 100%;
+      text-align: left;
+      padding: 13px 16px;
+      border-radius: 15px;
+      border: 2px solid #8a6ec4;
+      background: #3b2d70;
+      color: #fff8e8;
+      font-size: 16px;
+      font-weight: 500;
+      box-shadow: 0 4px 0 #1b143b;
+      transition: transform 0.12s, border-color 0.15s, background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .choice-item:hover:not(:disabled) {
+      transform: translateY(-2px);
+      border-color: #ffdb84;
+      background: #4a398a;
+    }
+
+    .choice-item.selected {
+      border-color: #ffdc83;
+      background: #6c4da3;
+      box-shadow: 0 0 0 3px #ffdc8360, 0 4px 0 #2b1d4d;
+    }
+
+    .choice-item.correct {
+      border-color: var(--green);
+      background: #1d5c48;
+      box-shadow: 0 0 0 3px #4ce5a555;
+    }
+
+    .choice-item.wrong {
+      border-color: var(--red);
+      background: #692539;
+      box-shadow: 0 0 0 3px #ff829755;
+    }
+
+    .choice-item:disabled { cursor: default; }
+
+    /* ตัวเลือกขั้นที่ 2 (สื่อสิ่งพิมพ์ / สื่ออิเล็กทรอนิกส์) */
+    .type-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .type-card-btn {
+      padding: 15px 14px;
+      border-radius: 16px;
+      border: 2px solid #8a6ec4;
+      background: #3b2d70;
+      color: #fff8e8;
+      font-size: 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      box-shadow: 0 5px 0 #1b143b;
+      transition: all 0.15s;
+    }
+
+    .type-card-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      border-color: #ffdb84;
+    }
+
+    .type-card-btn.selected {
+      border-color: #ffdc83;
+      background: #6c4da3;
+      box-shadow: 0 0 0 3px #ffdc8360, 0 5px 0 #2b1d4d;
+    }
+
+    .type-card-btn.correct {
+      border-color: var(--green);
+      background: #1d5c48;
+    }
+
+    .type-card-btn.wrong {
+      border-color: var(--red);
+      background: #692539;
+    }
+
+    /* กล่องเฉลย */
+    .feedback-banner {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: #1b153b;
+      border: 2px solid #8a6ec4;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+    .feedback-banner.all-good { border-color: var(--green); }
+    .feedback-banner.partial { border-color: var(--gold); }
+
+    /* =========================================================================
+       3. หน้าสรุปผล (Result View)
+    ========================================================================= */
+    .result-box {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .trophy-badge {
+      width: 96px;
+      height: 96px;
+      border-radius: 28px;
+      background: #6650a5;
+      border: 2px solid #e3b976;
+      box-shadow: 0 8px 0 #35245f;
+      display: grid;
+      place-items: center;
+      font-size: 50px;
+      margin: 0 auto 16px;
+      transform: rotate(-6deg);
+    }
+
+    .result-stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .res-stat {
+      background: #3b2d70;
+      border: 1px solid #7054a8;
+      border-radius: 16px;
+      padding: 16px 10px;
+    }
+    .res-stat strong { display: block; font-size: 28px; color: #ffdc83; }
+    .res-stat span { font-size: 13px; color: var(--muted); }
+
+    .review-list {
+      list-style: none;
+      padding: 0;
+      margin: 14px 0 22px;
+      display: grid;
+      gap: 9px;
+      max-height: 360px;
+      overflow-y: auto;
+      text-align: left;
+    }
+
+    .review-list li {
+      background: #1d163d;
+      border: 1px solid #6b53a6;
+      border-radius: 14px;
+      padding: 12px 15px;
+      font-size: 14px;
+    }
+
+    /* =========================================================================
+       4. โหมดครู (Teacher Dashboard)
+    ========================================================================= */
+    .teacher-tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      padding: 10px 18px;
+      border-radius: 13px;
+      border: 1px solid #8a6ec4;
+      background: #392b66;
+      color: #e9defa;
+      font-size: 15px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(180deg, #ffda78, #ffa34f);
+      color: #3b2252;
+      border-color: #ffe8ac;
+      box-shadow: 0 4px 0 #af5b45;
+    }
+
+    .table-wrap { overflow-x: auto; margin-top: 14px; }
+    .arcade-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 720px;
+      font-size: 14px;
+    }
+    .arcade-table th, .arcade-table td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #624e9a;
+      text-align: left;
+    }
+    .arcade-table th { color: #ffdc83; background: #221947; white-space: nowrap; }
+    .arcade-table tbody tr:hover { background: #3e2f70; }
+
+    /* การ์ดแก้ไขโจทย์ในโหมดครู */
+    .editor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .q-edit-card {
+      background: #221947;
+      border: 1px solid #765db0;
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .q-edit-preview {
+      width: 100%;
+      height: 135px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: #14102b;
+      border: 1px solid #624e9a;
+    }
+
+    .code-box {
+      background: #120e29;
+      border: 1px solid #624e9a;
+      border-radius: 14px;
+      padding: 14px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #a5f3fc;
+      max-height: 260px;
+      overflow: auto;
+      white-space: pre;
+      margin-top: 12px;
+    }
+
+    /* Toast Notification */
+    .toast-box {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+    .toast-msg {
+      background: #292050;
+      border: 2px solid var(--gold);
+      color: #fff8e8;
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 10px 25px #00000080;
+      animation: fadeUp 0.25s ease-out;
+    }
+
+    footer {
+      text-align: center;
+      color: #baaed7;
+      font-size: 13px;
+      margin-top: 32px;
+    }
+
+    @media (max-width: 780px) {
+      .hud-grid, .board-grid, .form-grid, .type-grid, .result-stats-row {
+        grid-template-columns: 1fr;
+      }
+      .float-badge { width: 52px; height: 52px; font-size: 26px; opacity: 0.65; }
+      .float-1 { top: 4%; left: 3%; }
+      .float-2 { top: 4%; right: 3%; }
+      .float-3 { bottom: 3%; left: 3%; }
+      .float-4 { bottom: 3%; right: 3%; }
+      .media-img-wrap { height: 190px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- แถบเมนูด้านบน -->
+  <header>
+    <div class="brand">
+      <div class="brand-icon"><i data-lucide="shapes"></i></div>
+      <span>ภารกิจวิเคราะห์สื่อการอ่าน (ม.4)</span>
+    </div>
+    <div class="header-actions">
+      <span class="pill-tag">
+        <span id="sync-dot" class="sync-dot"></span>
+        <span id="sync-label">บันทึกในเครื่อง</span>
+      </span>
+      <button id="teacher-toggle-btn" class="btn-teacher" type="button">
+        <i data-lucide="settings-2" style="width:17px;height:17px;"></i>
+        <span>โหมดครู</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===================================================================
+         1. หน้าเริ่มต้น (Start View)
+    ==================================================================== -->
+    <section id="view-start" class="view active">
+      <div class="intro-stage">
+        <span class="float-badge float-1" aria-hidden="true">📰</span>
+        <span class="float-badge float-2" aria-hidden="true">📱</span>
+        <span class="float-badge float-3" aria-hidden="true">📚</span>
+        <span class="float-badge float-4" aria-hidden="true">💻</span>
+
+        <div class="intro-inner">
+          <span class="eyebrow">🎯 เกมฝึกทักษะการรู้เท่าทันสื่อ · ครบ 20 ชนิด</span>
+          <h1 class="hero-title">ภารกิจวิเคราะห์<br><span>สื่อการอ่าน (ม.4)</span></h1>
+
+          <div class="instruction-card">
+            <strong>คำชี้แจง:</strong> ให้นักเรียนพิจารณาตัวอย่างสื่อการอ่านทั้ง <strong>20 ชนิด</strong> ที่สุ่มขึ้นมาทีละข้อ แล้วจับคู่ลักษณะสำคัญของสื่อ พร้อมจำแนกว่าเป็น <strong>สื่อสิ่งพิมพ์</strong> หรือ <strong>สื่ออิเล็กทรอนิกส์</strong> ให้ถูกต้องครบถ้วน
+          </div>
+
+          <div class="steps-pills">
+            <span class="step-pill"><b>1</b> ดูภาพและชื่อสื่อ</span>
+            <span class="step-pill"><b>2</b> จับคู่ลักษณะสำคัญ (+10)</span>
+            <span class="step-pill"><b>3</b> จำแนกประเภทสื่อ (+10)</span>
+          </div>
+
+          <!-- แจ้งเตือนเล่นต่อจากที่ค้างไว้ -->
+          <div id="resume-box" class="instruction-card" style="border-color: var(--gold); background: #33255c;" hidden>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+              <span id="resume-text" style="color: #ffdf8c; font-weight: 600;">พบความคืบหน้าที่บันทึกไว้</span>
+              <button id="resume-btn" type="button" class="btn-gold" style="padding: 8px 16px; font-size: 14px;">เล่นต่อทันที</button>
+            </div>
+          </div>
+
+          <form id="start-form" class="player-form">
+            <div class="form-grid">
+              <div class="field-group">
+                <label for="in-first">ชื่อ *</label>
+                <input id="in-first" class="arcade-input" required maxlength="60" placeholder="กรอกชื่อจริง">
+              </div>
+              <div class="field-group">
+                <label for="in-last">นามสกุล *</label>
+                <input id="in-last" class="arcade-input" required maxlength="60" placeholder="กรอกนามสกุล">
+              </div>
+              <div class="field-group">
+                <label for="in-number">เลขที่ *</label>
+                <input id="in-number" class="arcade-input" required inputmode="numeric" pattern="[0-9]+" maxlength="3" placeholder="เช่น 15">
+              </div>
+              <div class="field-group">
+                <label for="in-room">ห้อง *</label>
+                <input id="in-room" class="arcade-input" required maxlength="20" placeholder="เช่น ม.4/1">
+              </div>
+            </div>
+
+            <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+              <button type="submit" class="btn-gold">
+                <span>เริ่มทำภารกิจ 20 ข้อ</span>
+                <i data-lucide="arrow-right" style="width:19px;height:19px;"></i>
+              </button>
+              <button id="demo-btn" type="button" class="btn-secondary">
+                <i data-lucide="play" style="width:18px;height:18px;"></i>
+                <span>ทดลองเล่นทันที</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         2. หน้าเล่นเกม (Game View)
+    ==================================================================== -->
+    <section id="view-game" class="view">
+      <div class="hud-grid">
+        <div class="hud-card">
+          <span class="hud-label">🎓 ผู้เล่น</span>
+          <strong id="hud-player" class="hud-value" style="font-size:17px;">-</strong>
+        </div>
+        <div class="hud-card">
+          <span class="hud-label">⭐ คะแนนสะสม (เต็ม 400)</span>
+          <strong id="hud-score" class="hud-value">0</strong>
+        </div>
+        <div class="hud-card">
+          <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--muted);">
+            <span>ความคืบหน้าภารกิจ</span>
+            <strong id="hud-progress-text" style="color:var(--gold-bright);">ข้อ 1 / 20</strong>
+          </div>
+          <div class="progress-track">
+            <div id="hud-progress-fill" class="progress-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="board-grid">
+        <!-- ฝั่งซ้าย: รูปภาพและชื่อสื่อ -->
+        <div class="arcade-card">
+          <div class="panel-header">
+            <h2 class="panel-title">
+              <span class="badge-icon"><i data-lucide="image" style="width:16px;height:16px;"></i></span>
+              <span id="q-badge">สื่อชนิดที่ 1 จาก 20</span>
+            </h2>
+            <button id="home-btn" type="button" class="pill-tag" style="cursor:pointer;">← หน้าแรก</button>
+          </div>
+
+          <div class="media-frame">
+            <div class="media-img-wrap">
+              <img id="media-img" src="" alt="ภาพประกอบสื่อการอ่าน">
+            </div>
+            <h3 id="media-title" class="media-name">หนังสือพิมพ์</h3>
+            <p style="margin:0; font-size:14px; color:#d8ccf0;">พิจารณาสื่อชนิดนี้ แล้วตอบคำถามทั้ง 2 ขั้นตอนด้านขวา</p>
+          </div>
+
+          <div id="feedback-box" class="feedback-banner" hidden></div>
+        </div>
+
+        <!-- ฝั่งขวา: 2 ขั้นตอนการตอบคำถาม -->
+        <div class="arcade-card">
+          <div class="panel-header">
+            <h2 class="panel-title">
+              <span class="badge-icon">1</span>
+              <span>จับคู่ลักษณะสำคัญของสื่อ (+10 คะแนน)</span>
+            </h2>
+          </div>
+          <div id="choices-list" class="choice-stack"></div>
+
+          <div class="panel-header" style="margin-top:8px;">
+            <h2 class="panel-title">
+              <span class="badge-icon">2</span>
+              <span>จำแนกประเภทของสื่อ (+10 คะแนน)</span>
+            </h2>
+          </div>
+          <div class="type-grid">
+            <button type="button" class="type-card-btn" data-type="สื่อสิ่งพิมพ์">
+              <i data-lucide="book-open" style="width:20px;height:20px;color:#ffcf75;"></i>
+              <span>สื่อสิ่งพิมพ์</span>
+            </button>
+            <button type="button" class="type-card-btn" data-type="สื่ออิเล็กทรอนิกส์">
+              <i data-lucide="monitor-smartphone" style="width:20px;height:20px;color:#7dd3fc;"></i>
+              <span>สื่ออิเล็กทรอนิกส์</span>
+            </button>
+          </div>
+
+          <p id="hint-text" style="font-size:14px; color:var(--muted); margin:0 0 16px;">
+            เลือกคำตอบให้ครบทั้งข้อ 1 และข้อ 2 แล้วกดปุ่มตรวจคำตอบ ✨
+          </p>
+
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button id="submit-q-btn" type="button" class="btn-gold" style="width:100%;" disabled>
+              <i data-lucide="check-circle" style="width:19px;height:19px;"></i>
+              <span>ตรวจคำตอบข้อนี้</span>
+            </button>
+            <button id="next-q-btn" type="button" class="btn-gold" style="width:100%;" hidden>
+              <span>ไปข้อถัดไป</span>
+              <i data-lucide="arrow-right" style="width:19px;height:19px;"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         3. หน้าสรุปผล (Result View)
+    ==================================================================== -->
+    <section id="view-result" class="view">
+      <div class="arcade-card result-box">
+        <div class="trophy-badge" aria-hidden="true">🏆</div>
+        <h2 style="font-size:34px; margin:0 0 6px; color:var(--gold-bright);">ภารกิจสำเร็จครบทั้ง 20 ข้อ!</h2>
+        <p id="res-student" style="color:var(--muted); margin:0 0 12px; font-size:16px;"></p>
+        <p id="res-sync-msg" style="font-weight:600; color:var(--green); margin:0 0 18px;"></p>
+
+        <div class="result-stats-row">
+          <div class="res-stat">
+            <strong id="res-total">0 / 400</strong>
+            <span>คะแนนรวมทั้งหมด</span>
+          </div>
+          <div class="res-stat">
+            <strong id="res-match">0 / 20</strong>
+            <span>จับคู่ลักษณะถูก</span>
+          </div>
+          <div class="res-stat">
+            <strong id="res-type">0 / 20</strong>
+            <span>จำแนกประเภทถูก</span>
+          </div>
+        </div>
+
+        <h3 style="text-align:left; color:var(--gold-bright); margin:16px 0 8px;">📋 ทบทวนเฉลยทั้ง 20 ชนิดสื่อ</h3>
+        <ul id="res-review-list" class="review-list"></ul>
+
+        <button id="restart-btn" type="button" class="btn-gold">
+          <i data-lucide="rotate-ccw" style="width:18px;height:18px;"></i>
+          <span>กลับหน้าแรก (เริ่มรอบใหม่)</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         4. โหมดครู (Teacher View)
+    ==================================================================== -->
+    <section id="view-teacher" class="view">
+      <div class="arcade-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:18px;">
+          <div>
+            <h2 style="margin:0; color:var(--gold-bright); font-size:26px;">🛠️ ศูนย์จัดการสำหรับครู</h2>
+            <p style="margin:4px 0 0; color:var(--muted); font-size:14px;">ดูคะแนนนักเรียน แก้ไขโจทย์ทั้ง 20 ข้อ และเชื่อมต่อ Google Sheets</p>
+          </div>
+          <button id="close-teacher-btn" type="button" class="btn-secondary" style="padding:9px 16px; font-size:14px;">
+            ← กลับหน้าเกม
+          </button>
+        </div>
+
+        <!-- แท็บย่อย 3 แท็บ -->
+        <div class="teacher-tabs" role="tablist">
+          <button type="button" class="tab-btn active" data-tab="tab-scores">📊 1. ตารางคะแนนนักเรียน</button>
+          <button type="button" class="tab-btn" data-tab="tab-editor">✏️ 2. แก้ไขโจทย์และรูปภาพ (20 ข้อ)</button>
+          <button type="button" class="tab-btn" data-tab="tab-sheets">🔗 3. ตั้งค่าเชื่อมต่อ Google Sheets</button>
+        </div>
+
+        <!-- แท็บที่ 1: ตารางคะแนน -->
+        <div id="tab-scores" class="teacher-tab-pane">
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:end; margin-bottom:14px;">
+            <div style="flex:1; min-width:200px;">
+              <label style="display:block; font-size:13px; color:var(--muted); margin-bottom:4px;">ค้นหาชื่อ ห้อง หรือเลขที่</label>
+              <input id="search-score-input" class="arcade-input" type="search" placeholder="พิมพ์คำค้นหา...">
+            </div>
+            <div style="min-width:160px;">
+              <label style="display:block; font-size:13px; color:var(--muted); margin-bottom:4px;">เรียงลำดับตาม</label>
+              <select id="sort-score-select" class="arcade-select">
+                <option value="recent">ส่งล่าสุด</option>
+                <option value="score">คะแนนสูงสุด</option>
+                <option value="room">ห้องเรียน</option>
+                <option value="number">เลขที่</option>
+              </select>
+            </div>
+            <button id="refresh-scores-btn" type="button" class="btn-secondary" style="padding:10px 16px; font-size:14px;">
+              🔄 รีเฟรช
+            </button>
+            <button id="export-csv-btn" type="button" class="btn-gold" style="padding:10px 18px; font-size:14px;">
+              📥 ดาวน์โหลด Excel (CSV)
+            </button>
+          </div>
+
+          <p id="scores-status" style="font-size:14px; color:var(--gold-bright); margin:8px 0;">กำลังโหลดข้อมูล...</p>
+
+          <div class="table-wrap">
+            <table class="arcade-table">
+              <thead>
+                <tr>
+                  <th>ชื่อ–นามสกุล</th>
+                  <th>เลขที่</th>
+                  <th>ห้อง</th>
+                  <th>จับคู่ลักษณะ (200)</th>
+                  <th>จำแนกประเภท (200)</th>
+                  <th>คะแนนรวม (400)</th>
+                  <th>เวลาที่ส่ง</th>
+                </tr>
+              </thead>
+              <tbody id="scores-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- แท็บที่ 2: แก้ไขโจทย์ทั้ง 20 ข้อ -->
+        <div id="tab-editor" class="teacher-tab-pane" hidden>
+          <div style="background:#1d163d; border:1px solid #7d63bd; border-radius:16px; padding:14px 16px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <p style="margin:0; font-size:14px; color:#e9defa;">
+              แก้ไขชื่อสื่อ ลิงก์รูปภาพ (URL) ลักษณะเด่น และประเภทสื่อได้อิสระ เมื่อกดบันทึก ระบบจะอัปเดตทั้งในเครื่องและบน <strong>Google Sheets (Config_M4)</strong>
+            </p>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button id="reset-questions-btn" type="button" class="btn-secondary" style="padding:9px 15px; font-size:14px;">
+                รีเซ็ตกลับค่าเริ่มต้น
+              </button>
+              <button id="save-questions-btn" type="button" class="btn-gold" style="padding:9px 18px; font-size:14px;">
+                💾 บันทึกโจทย์ทั้ง 20 ข้อ
+              </button>
+            </div>
+          </div>
+
+          <div id="questions-editor-grid" class="editor-grid"></div>
+        </div>
+
+        <!-- แท็บที่ 3: ตั้งค่าเชื่อมต่อ Google Sheets -->
+        <div id="tab-sheets" class="teacher-tab-pane" hidden>
+          <div style="background:#1d163d; border:1px solid #7d63bd; border-radius:18px; padding:18px; margin-bottom:18px;">
+            <h3 style="margin:0 0 8px; color:var(--gold-bright);">1. วางลิงก์ Web App URL จาก Google Apps Script</h3>
+            <p style="margin:0 0 12px; font-size:14px; color:var(--muted);">
+              เมื่อเชื่อมต่อแล้ว นักเรียนที่เปิดเล่นจากเครื่องอื่นจะได้รับชุดโจทย์ล่าสุดที่คุณแก้ไข และคะแนนจะส่งกลับมาที่ตารางอัตโนมัติ
+            </p>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <input id="sheet-url-input" class="arcade-input" style="flex:1; min-width:250px;" type="url" placeholder="https://script.google.com/macros/s/...../exec">
+              <button id="save-sheet-url-btn" type="button" class="btn-gold" style="padding:10px 20px; font-size:15px;">
+                บันทึกลิงก์ URL
+              </button>
+            </div>
+          </div>
+
+          <div style="background:#1d163d; border:1px solid #7d63bd; border-radius:18px; padding:18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+              <h3 style="margin:0; color:var(--gold-bright);">2. โค้ด Google Apps Script (รองรับซิงก์ทั้งคะแนนและชุดโจทย์)</h3>
+              <button id="copy-script-btn" type="button" class="btn-secondary" style="padding:8px 15px; font-size:14px;">
+                📋 คัดลอกโค้ด Apps Script
+              </button>
+            </div>
+            <ol style="font-size:14px; color:#e9defa; line-height:1.7; margin:12px 0;">
+              <li>เปิด <a href="https://sheets.google.com" target="_blank" rel="noopener" style="color:var(--gold);">Google Sheets</a> สร้างไฟล์ใหม่ แล้วไปที่เมนู <strong>ส่วนขยาย (Extensions) &gt; Apps Script</strong></li>
+              <li>กดปุ่ม <strong>"คัดลอกโค้ด Apps Script"</strong> ด้านบน แล้วนำไปวางแทนที่โค้ดเดิมทั้งหมด</li>
+              <li>กด <strong>การทำให้ใช้งานได้ (Deploy) &gt; รายการใหม่ (New deployment)</strong> เลือกประเภท <strong>เว็บแอป (Web app)</strong></li>
+              <li>ตั้งค่า <em>ผู้ที่มีสิทธิ์เข้าถึง (Who has access)</em> เป็น <strong>ทุกคน (Anyone)</strong> แล้วกด Deploy เพื่อคัดลอก URL มาวางในข้อ 1</li>
+            </ol>
+            <div id="apps-script-preview" class="code-box"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    สนุกกับการเรียนรู้และรู้เท่าทันสื่อการอ่าน ระดับชั้นมัธยมศึกษาปีที่ 4 💜
+  </footer>
+</div>
+
+<div id="toast-container" class="toast-box" aria-live="polite"></div>
+
+<script>
+  // =========================================================================
+  // 1. คลังข้อมูลเริ่มต้นสื่อการอ่านทั้ง 20 ชนิดพร้อมรูปภาพจริง
+  // =========================================================================
+  const DEFAULT_MEDIA_BANK = [
+    // สื่อสิ่งพิมพ์ 10 ชนิด
+    {
+      id: 1,
+      name: "หนังสือพิมพ์",
+      type: "สื่อสิ่งพิมพ์",
+      desc: "นำเสนอข่าวสารและเหตุการณ์ต่าง ๆ",
+      imageUrl: "https://images.pexels.com/photos/3866816/pexels-photo-3866816.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      id: 2,
+      name: "นิตยสาร",
+      type: "สื่อสิ่งพิมพ์",
+      desc: "นำเสนอสาระและเรื่องราวเฉพาะด้าน",
+      imageUrl: "https://images.pexels.com/photos/4271624/pexels-photo-4271624.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      id: 3,
+      name: "หนังสือเรียน",
+      type: "สื่อสิ่งพิมพ์",
+      desc: "ใช้ประกอบการเรียนรู้ในรายวิชา",
+      imageUrl: "https://images.pexels.com/photos/256455/pexels-photo-256455.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      id: 4,
+      name: "หนังสือนวนิยาย",
+      type: "สื่อสิ่งพิมพ์",
+      desc: "นำเสนอเรื่องราวและความบันเทิง",
+      imageUrl: "https://images.pexels.com/photos/8236200/pexels-photo-8236200.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      id: 5,
+      name: "หนังสือการ์ตูน",
+      type: "สื่อสิ่งพิมพ์",
+      desc: "เล่าเรื่องผ่านภาพและข้อความ",
+      imageUrl: "https://images.pexels.com/photos/7809123/pexels-photo-7809123.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      id: 6,
+      name: "แผ่นพับ",
+      type: "สื่อสิ่งพิมพ์",
+      desc: "ให้ข้อมูลหรือประชาสัมพันธ์",
+      imageUrl: "https://images.pexels.com/photos/6565757/pexels-photo-6565757.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      id: 7,
+      name: "โปสเตอร์",
+      type: "สื่อสิ่งพิมพ์",
+      desc: "สื่อสารข้อมูลด้วยข้อความและภาพ",
+      imageUrl: "https://images.pexels.com/photos/3004909/pexels-photo-3004909.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      id: 8,
+      name: "สารานุกรม",
+      type: "สื่อสิ่งพิมพ์",
+      desc: "รวบรวมความรู้ในเรื่องต่าง ๆ",
+      imageUrl: "https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      id: 9,
+      name: "วารสารวิชาการ",
+      type: "สื่อสิ่งพิมพ์",
+      desc: "เผยแพร่บทความและผลงานทางวิชาการ",
+      imageUrl: "https://images.pexels.com/photos/590493/pexels-photo-590493.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      id: 10,
+      name: "หนังสือคู่มือ",
+      type: "สื่อสิ่งพิมพ์",
+      desc: "แนะนำวิธีการหรือขั้นตอนการปฏิบัติ",
+      imageUrl: "https://images.pexels.com/photos/4792509/pexels-photo-4792509.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+
+    // สื่ออิเล็กทรอนิกส์ 10 ชนิด
+    {
+      id: 11,
+      name: "หนังสืออิเล็กทรอนิกส์ (E-book)",
+      type: "สื่ออิเล็กทรอนิกส์",
+      desc: "หนังสือที่อ่านผ่านอุปกรณ์อิเล็กทรอนิกส์",
+      imageUrl: "https://images.pexels.com/photos/8546475/pexels-photo-8546475.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      id: 12,
+      name: "เว็บไซต์ข่าว",
+      type: "สื่ออิเล็กทรอนิกส์",
+      desc: "นำเสนอข่าวสารผ่านเว็บไซต์",
+      imageUrl: "https://images.pexels.com/photos/177557/pexels-photo-177557.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      id: 13,
+      name: "บทความออนไลน์",
+      type: "สื่ออิเล็กทรอนิกส์",
+      desc: "เผยแพร่เนื้อหาความรู้ผ่านอินเทอร์เน็ต",
+      imageUrl: "https://images.pexels.com/photos/261662/pexels-photo-261662.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      id: 14,
+      name: "นิตยสารออนไลน์",
+      type: "สื่ออิเล็กทรอนิกส์",
+      desc: "นิตยสารที่อ่านผ่านสื่อดิจิทัล",
+      imageUrl: "https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      id: 15,
+      name: "เอกสาร PDF",
+      type: "สื่ออิเล็กทรอนิกส์",
+      desc: "เอกสารดิจิทัลที่เปิดอ่านผ่านอุปกรณ์",
+      imageUrl: "https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      id: 16,
+      name: "บล็อก (Blog)",
+      type: "สื่ออิเล็กทรอนิกส์",
+      desc: "พื้นที่เผยแพร่เรื่องราวและความคิดเห็น",
+      imageUrl: "https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      id: 17,
+      name: "สารานุกรมออนไลน์",
+      type: "สื่ออิเล็กทรอนิกส์",
+      desc: "แหล่งรวบรวมความรู้ผ่านเว็บไซต์",
+      imageUrl: "https://images.pexels.com/photos/270408/pexels-photo-270408.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      id: 18,
+      name: "อินโฟกราฟิกออนไลน์",
+      type: "สื่ออิเล็กทรอนิกส์",
+      desc: "นำเสนอข้อมูลด้วยภาพและข้อความ",
+      imageUrl: "https://images.pexels.com/photos/669615/pexels-photo-669615.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      id: 19,
+      name: "วารสารวิชาการออนไลน์",
+      type: "สื่ออิเล็กทรอนิกส์",
+      desc: "เผยแพร่บทความวิชาการในรูปแบบดิจิทัล",
+      imageUrl: "https://images.pexels.com/photos/4050315/pexels-photo-4050315.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      id: 20,
+      name: "ห้องสมุดดิจิทัล",
+      type: "สื่ออิเล็กทรอนิกส์",
+      desc: "รวบรวมหนังสือและเอกสารให้อ่านผ่านระบบออนไลน์",
+      imageUrl: "https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=800"
+    }
+  ];
+
+  // โค้ด Google Apps Script ฉบับสมบูรณ์ (รองรับทั้ง Scores_M4 และ Config_M4)
+  const APPS_SCRIPT_CODE = `const SHEET_SCORES = "Scores_M4";
+const SHEET_CONFIG = "Config_M4";
+
+function doGet(e) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  initSheets(ss);
+
+  // 1. ดึงชุดโจทย์ล่าสุดของครู
+  const configSheet = ss.getSheetByName(SHEET_CONFIG);
+  let configData = null;
+  if (configSheet.getLastRow() >= 2) {
+    const raw = configSheet.getRange(2, 1).getValue();
+    try { configData = JSON.parse(raw); } catch (_) {}
+  }
+
+  // 2. ดึงผลคะแนนนักเรียนทั้งหมด
+  const scoreSheet = ss.getSheetByName(SHEET_SCORES);
+  const rows = scoreSheet.getDataRange().getValues();
+  const scores = [];
+  for (let i = 1; i < rows.length; i++) {
+    if (!rows[i][0]) continue;
+    scores.push({
+      first_name: String(rows[i][0]),
+      last_name: String(rows[i][1]),
+      student_number: String(rows[i][2]),
+      classroom: String(rows[i][3]),
+      match_score: Number(rows[i][4]) || 0,
+      type_score: Number(rows[i][5]) || 0,
+      total_score: Number(rows[i][6]) || 0,
+      submitted_at: String(rows[i][7] || "")
+    });
+  }
+
+  return jsonOut({ ok: true, config: configData, scores: scores });
+}
+
+function doPost(e) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  initSheets(ss);
+
+  try {
+    const payload = JSON.parse(e.postData.contents);
+
+    if (payload.action === "save_config") {
+      const configSheet = ss.getSheetByName(SHEET_CONFIG);
+      configSheet.getRange(2, 1).setValue(JSON.stringify(payload.config));
+      configSheet.getRange(2, 2).setValue(new Date().toLocaleString("th-TH"));
+      return jsonOut({ ok: true });
+    }
+
+    if (payload.action === "save_score") {
+      const s = payload.score;
+      const scoreSheet = ss.getSheetByName(SHEET_SCORES);
+      scoreSheet.appendRow([
+        s.first_name,
+        s.last_name,
+        s.student_number,
+        s.classroom,
+        s.match_score,
+        s.type_score,
+        s.total_score,
+        s.submitted_at
+      ]);
+      return jsonOut({ ok: true });
+    }
+
+    return jsonOut({ ok: false, error: "Invalid action" });
+  } catch (err) {
+    return jsonOut({ ok: false, error: err.message });
+  }
+}
+
+function initSheets(ss) {
+  let scoreSheet = ss.getSheetByName(SHEET_SCORES);
+  if (!scoreSheet) {
+    scoreSheet = ss.insertSheet(SHEET_SCORES);
+    scoreSheet.appendRow([
+      "ชื่อ", "นามสกุล", "เลขที่", "ห้อง",
+      "คะแนนจับคู่ลักษณะ (200)", "คะแนนจำแนกประเภท (200)",
+      "คะแนนรวม (400)", "เวลาที่ส่ง"
+    ]);
+  }
+  let configSheet = ss.getSheetByName(SHEET_CONFIG);
+  if (!configSheet) {
+    configSheet = ss.insertSheet(SHEET_CONFIG);
+    configSheet.appendRow(["config_json", "updated_at"]);
+  }
+}
+
+function jsonOut(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}`;
+
+  const STORAGE = {
+    BANK: "m4_arcade_media_bank_v1",
+    PROGRESS: "m4_arcade_progress_v1",
+    SCORES: "m4_arcade_scores_v1",
+    SHEET_URL: "m4_arcade_sheet_url_v1"
+  };
+
+  const $ = id => document.getElementById(id);
+
+  let mediaBank = loadLocalBank();
+  let gameState = null;
+  let selectedChoice = null;
+  let selectedType = null;
+  let stepLocked = false;
+  let allScores = [];
+
+  // แสดง Toast แทน alert
+  function notify(text) {
+    const box = $("toast-container");
+    const div = document.createElement("div");
+    div.className = "toast-msg";
+    div.textContent = text;
+    box.appendChild(div);
+    setTimeout(() => {
+      div.style.opacity = "0";
+      div.style.transition = "opacity 0.25s";
+      setTimeout(() => div.remove(), 260);
+    }, 3200);
+  }
+
+  function shuffle(list) {
+    const arr = [...list];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function showView(viewId) {
+    document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.id === viewId));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function getSheetUrl() {
+    return localStorage.getItem(STORAGE.SHEET_URL) || "";
+  }
+
+  function loadLocalBank() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE.BANK));
+      if (Array.isArray(saved) && saved.length === 20) return saved;
+    } catch (_) {}
+    return structuredClone(DEFAULT_MEDIA_BANK);
+  }
+
+  function updateSyncStatus() {
+    const url = getSheetUrl();
+    const dot = $("sync-dot");
+    const label = $("sync-label");
+    if (url) {
+      dot.classList.add("online");
+      label.textContent = "เชื่อมต่อ Google Sheets แล้ว";
+    } else {
+      dot.classList.remove("online");
+      label.textContent = "บันทึกในเครื่อง";
+    }
+  }
+
+  // ซิงก์ชุดโจทย์จาก Google Sheets เมื่อเปิดหน้าเว็บ
+  async function syncConfigFromSheets() {
+    const url = getSheetUrl();
+    if (!url) return;
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.ok && Array.isArray(data.config) && data.config.length === 20) {
+        mediaBank = data.config;
+        localStorage.setItem(STORAGE.BANK, JSON.stringify(mediaBank));
+      }
+      if (data.ok && Array.isArray(data.scores)) {
+        allScores = data.scores.reverse();
+      }
+    } catch (_) {}
+  }
+
+  // ตรวจสอบความคืบหน้าที่เล่นค้างไว้
+  function checkResumeState() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE.PROGRESS));
+      if (saved && !saved.isDemo && Array.isArray(saved.answers) && saved.answers.length < saved.questions.length) {
+        $("resume-box").hidden = false;
+        $("resume-text").textContent = `พบข้อมูลค้างไว้ของ ${saved.student.first} ${saved.student.last} (ทำไปแล้ว ${saved.answers.length}/${saved.questions.length} ข้อ)`;
+        $("resume-btn").onclick = () => {
+          gameState = saved;
+          renderQuestion();
+        };
+      } else {
+        $("resume-box").hidden = true;
+      }
+    } catch (_) {
+      $("resume-box").hidden = true;
+    }
+  }
+
+  function buildChoices(target) {
+    const distractors = shuffle(
+      mediaBank.filter(m => m.id !== target.id && m.desc !== target.desc)
+    ).slice(0, 3).map(m => m.desc);
+    return shuffle([target.desc, ...distractors]);
+  }
+
+  // เริ่มเกม
+  $("start-form").addEventListener("submit", e => {
+    e.preventDefault();
+    const student = {
+      first: $("in-first").value.trim(),
+      last: $("in-last").value.trim(),
+      number: $("in-number").value.trim(),
+      room: $("in-room").value.trim()
+    };
+
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE.PROGRESS));
+      if (
+        saved && !saved.isDemo &&
+        saved.student.first === student.first &&
+        saved.student.last === student.last &&
+        saved.student.number === student.number &&
+        saved.student.room === student.room &&
+        saved.answers.length < saved.questions.length
+      ) {
+        gameState = saved;
+        notify(`กู้คืนความคืบหน้าของ ${student.first} เรียบร้อยแล้ว`);
+        renderQuestion();
+        return;
+      }
+    } catch (_) {}
+
+    gameState = {
+      isDemo: false,
+      student,
+      questions: shuffle(mediaBank).map(item => ({
+        ...item,
+        choices: buildChoices(item)
+      })),
+      answers: []
+    };
+    localStorage.setItem(STORAGE.PROGRESS, JSON.stringify(gameState));
+    renderQuestion();
+  });
+
+  $("demo-btn").addEventListener("click", () => {
+    gameState = {
+      isDemo: true,
+      student: { first: "นักเรียน", last: "ทดลองเล่น", number: "00", room: "ม.4/ทดสอบ" },
+      questions: shuffle(mediaBank).map(item => ({
+        ...item,
+        choices: buildChoices(item)
+      })),
+      answers: []
+    };
+    notify("เข้าสู่โหมดทดลองเล่น (คะแนนไม่ถูกบันทึกส่งครู)");
+    renderQuestion();
+  });
+
+  $("home-btn").addEventListener("click", () => {
+    checkResumeState();
+    showView("view-start");
+  });
+
+  // แสดงคำถามข้อปัจจุบัน
+  function renderQuestion() {
+    if (gameState.answers.length >= gameState.questions.length) {
+      finishGame();
+      return;
+    }
+
+    const idx = gameState.answers.length;
+    const totalQ = gameState.questions.length;
+    const q = gameState.questions[idx];
+
+    selectedChoice = null;
+    selectedType = null;
+    stepLocked = false;
+
+    // อัปเดต HUD
+    $("hud-player").textContent = `${gameState.student.first} ${gameState.student.last} · ห้อง ${gameState.student.room} (เลขที่ ${gameState.student.number})`;
+    const scoreNow = gameState.answers.reduce((sum, a) => sum + (a.matchOk ? 10 : 0) + (a.typeOk ? 10 : 0), 0);
+    $("hud-score").textContent = scoreNow;
+    $("hud-progress-text").textContent = `ข้อ ${idx + 1} / ${totalQ}`;
+    $("hud-progress-fill").style.width = `${((idx + 1) / totalQ) * 100}%`;
+
+    // รูปภาพและชื่อสื่อฝั่งซ้าย
+    $("q-badge").textContent = `สื่อชนิดที่ ${idx + 1} จาก ${totalQ}`;
+    $("media-title").textContent = q.name;
+    const imgEl = $("media-img");
+    imgEl.src = q.imageUrl;
+    imgEl.alt = q.name;
+    imgEl.onerror = () => {
+      imgEl.onerror = null;
+      imgEl.src = `https://placehold.co/800x500/292050/ffcf75?text=${encodeURIComponent(q.name)}`;
+    };
+
+    $("feedback-box").hidden = true;
+
+    // สร้างปุ่มตัวเลือกขั้นที่ 1 (4 ข้อ)
+    const list = $("choices-list");
+    list.replaceChildren();
+    q.choices.forEach((choiceText, i) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "choice-item";
+      btn.dataset.value = choiceText;
+      btn.innerHTML = `<span><strong style="color:var(--gold); margin-right:6px;">${i + 1}.</strong> ${choiceText}</span>`;
+
+      btn.addEventListener("click", () => {
+        if (stepLocked) return;
+        selectedChoice = choiceText;
+        list.querySelectorAll(".choice-item").forEach(b => b.classList.toggle("selected", b === btn));
+        updateSubmitAvailability();
+      });
+      list.appendChild(btn);
+    });
+
+    // รีเซ็ตขั้นที่ 2
+    document.querySelectorAll(".type-card-btn").forEach(btn => {
+      btn.disabled = false;
+      btn.className = "type-card-btn";
+    });
+
+    $("hint-text").hidden = false;
+    $("submit-q-btn").hidden = false;
+    $("submit-q-btn").disabled = true;
+    $("next-q-btn").hidden = true;
+
+    showView("view-game");
+  }
+
+  document.querySelectorAll(".type-card-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (stepLocked) return;
+      selectedType = btn.dataset.type;
+      document.querySelectorAll(".type-card-btn").forEach(b => b.classList.toggle("selected", b === btn));
+      updateSubmitAvailability();
+    });
+  });
+
+  function updateSubmitAvailability() {
+    $("submit-q-btn").disabled = !(selectedChoice && selectedType);
+  }
+
+  // ตรวจคำตอบข้อปัจจุบัน
+  $("submit-q-btn").addEventListener("click", () => {
+    if (stepLocked) return;
+    stepLocked = true;
+
+    const idx = gameState.answers.length;
+    const q = gameState.questions[idx];
+    const matchOk = selectedChoice === q.desc;
+    const typeOk = selectedType === q.type;
+
+    // เฉลยขั้นที่ 1
+    $("choices-list").querySelectorAll(".choice-item").forEach(btn => {
+      btn.disabled = true;
+      btn.classList.remove("selected");
+      const val = btn.dataset.value;
+      if (val === q.desc) {
+        btn.classList.add("correct");
+        btn.innerHTML += `<span>✅</span>`;
+      } else if (val === selectedChoice && !matchOk) {
+        btn.classList.add("wrong");
+        btn.innerHTML += `<span>❌</span>`;
+      }
+    });
+
+    // เฉลยขั้นที่ 2
+    document.querySelectorAll(".type-card-btn").forEach(btn => {
+      btn.disabled = true;
+      btn.classList.remove("selected");
+      const val = btn.dataset.type;
+      if (val === q.type) btn.classList.add("correct");
+      else if (val === selectedType && !typeOk) btn.classList.add("wrong");
+    });
+
+    gameState.answers.push({
+      id: q.id,
+      name: q.name,
+      selectedDesc: selectedChoice,
+      correctDesc: q.desc,
+      matchOk,
+      selectedType,
+      correctType: q.type,
+      typeOk
+    });
+
+    if (!gameState.isDemo) {
+      localStorage.setItem(STORAGE.PROGRESS, JSON.stringify(gameState));
+    }
+
+    const scoreNow = gameState.answers.reduce((sum, a) => sum + (a.matchOk ? 10 : 0) + (a.typeOk ? 10 : 0), 0);
+    $("hud-score").textContent = scoreNow;
+
+    const earned = (matchOk ? 10 : 0) + (typeOk ? 10 : 0);
+    const fb = $("feedback-box");
+    fb.hidden = false;
+    fb.className = "feedback-banner " + (earned === 20 ? "all-good" : "partial");
+    fb.innerHTML = `
+      <div style="font-weight:700; color:var(--gold-bright); margin-bottom:4px;">
+        ผลการตรวจข้อที่ ${idx + 1} · ได้รับ +${earned} คะแนน 🎉
+      </div>
+      <div>• ลักษณะสำคัญ: ${matchOk ? '<span style="color:var(--green);font-weight:600;">ถูกต้อง</span>' : `<span style="color:var(--red);font-weight:600;">ไม่ถูกต้อง</span> (เฉลย: ${q.desc})`}</div>
+      <div>• ประเภทสื่อ: ${typeOk ? '<span style="color:var(--green);font-weight:600;">ถูกต้อง</span>' : `<span style="color:var(--red);font-weight:600;">ไม่ถูกต้อง</span> (เฉลย: ${q.type})`}</div>
+    `;
+
+    $("hint-text").hidden = true;
+    $("submit-q-btn").hidden = true;
+    $("next-q-btn").hidden = false;
+    $("next-q-btn").querySelector("span").textContent =
+      idx === gameState.questions.length - 1 ? "สรุปผลและส่งคะแนนทั้งหมด" : "ไปข้อถัดไป";
+  });
+
+  $("next-q-btn").addEventListener("click", renderQuestion);
+
+  // จบเกมและส่งคะแนน
+  async function finishGame() {
+    const matchCount = gameState.answers.filter(a => a.matchOk).length;
+    const typeCount = gameState.answers.filter(a => a.typeOk).length;
+    const totalScore = (matchCount + typeCount) * 10;
+
+    $("res-student").textContent = `${gameState.student.first} ${gameState.student.last} · เลขที่ ${gameState.student.number} · ห้อง ${gameState.student.room}`;
+    $("res-total").textContent = `${totalScore} / 400`;
+    $("res-match").textContent = `${matchCount} / 20`;
+    $("res-type").textContent = `${typeCount} / 20`;
+
+    // รายการทบทวนทั้ง 20 ข้อ
+    const reviewEl = $("res-review-list");
+    reviewEl.replaceChildren();
+    gameState.answers.forEach((a, i) => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <div style="display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap; margin-bottom:4px;">
+          <strong style="color:var(--gold-bright);">${i + 1}. ${a.name}</strong>
+          <span class="pill-tag" style="padding:2px 10px; font-size:12px;">${a.correctType}</span>
+        </div>
+        <div style="color:#e9defa; font-size:13px;">
+          • ลักษณะ: ${a.matchOk ? '✅' : '❌'} ${a.selectedDesc} ${!a.matchOk ? `<span style="color:var(--green);">(เฉลย: ${a.correctDesc})</span>` : ''}
+        </div>
+        <div style="color:#e9defa; font-size:13px;">
+          • จำแนกประเภท: ${a.typeOk ? '✅' : '❌'} ${a.selectedType}
+        </div>
+      `;
+      reviewEl.appendChild(li);
+    });
+
+    showView("view-result");
+
+    const statusMsg = $("res-sync-msg");
+    if (gameState.isDemo) {
+      statusMsg.style.color = "var(--gold)";
+      statusMsg.textContent = "โหมดทดลองเล่น: ไม่ได้บันทึกคะแนนเข้าสู่ระบบครู";
+      return;
+    }
+
+    localStorage.removeItem(STORAGE.PROGRESS);
+
+    const record = {
+      first_name: gameState.student.first,
+      last_name: gameState.student.last,
+      student_number: gameState.student.number,
+      classroom: gameState.student.room,
+      match_score: matchCount * 10,
+      type_score: typeCount * 10,
+      total_score: totalScore,
+      submitted_at: new Date().toLocaleString("th-TH")
+    };
+
+    const localScores = JSON.parse(localStorage.getItem(STORAGE.SCORES) || "[]");
+    localScores.unshift(record);
+    localStorage.setItem(STORAGE.SCORES, JSON.stringify(localScores));
+
+    const url = getSheetUrl();
+    if (url) {
+      statusMsg.style.color = "var(--gold)";
+      statusMsg.textContent = "⏳ กำลังส่งคะแนนเข้า Google Sheets...";
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          body: JSON.stringify({ action: "save_score", score: record })
+        });
+        const json = await res.json();
+        if (json.ok) {
+          statusMsg.style.color = "var(--green)";
+          statusMsg.textContent = "✅ ส่งคะแนนไปยัง Google Sheets เรียบร้อยแล้ว!";
+        } else {
+          throw new Error("Save error");
+        }
+      } catch (_) {
+        statusMsg.style.color = "var(--red)";
+        statusMsg.textContent = "⚠️ ส่งเข้า Google Sheets ไม่สำเร็จ (บันทึกสำรองในเครื่องแล้ว กรุณาแคปหน้าจอส่งครู)";
+      }
+    } else {
+      statusMsg.style.color = "var(--green)";
+      statusMsg.textContent = "💾 บันทึกคะแนนในเครื่องเรียบร้อยแล้ว";
+    }
+  }
+
+  $("restart-btn").addEventListener("click", () => {
+    gameState = null;
+    $("start-form").reset();
+    checkResumeState();
+    showView("view-start");
+  });
+
+  // =========================================================================
+  // 2. โหมดครู (Teacher Dashboard)
+  // =========================================================================
+  let inTeacherMode = false;
+
+  $("teacher-toggle-btn").addEventListener("click", () => {
+    inTeacherMode = !inTeacherMode;
+    if (inTeacherMode) {
+      $("teacher-toggle-btn").innerHTML = `<i data-lucide="arrow-left" style="width:17px;height:17px;"></i><span>กลับโหมดนักเรียน</span>`;
+      $("sheet-url-input").value = getSheetUrl();
+      $("apps-script-preview").textContent = APPS_SCRIPT_CODE;
+      showView("view-teacher");
+      loadTeacherScores();
+      renderQuestionsEditor();
+    } else {
+      exitTeacherMode();
+    }
+    lucide.createIcons();
+  });
+
+  $("close-teacher-btn").addEventListener("click", exitTeacherMode);
+
+  function exitTeacherMode() {
+    inTeacherMode = false;
+    $("teacher-toggle-btn").innerHTML = `<i data-lucide="settings-2" style="width:17px;height:17px;"></i><span>โหมดครู</span>`;
+    lucide.createIcons();
+    if (gameState && gameState.answers.length < gameState.questions.length) {
+      showView("view-game");
+    } else {
+      showView("view-start");
+    }
+  }
+
+  // สลับแท็บในโหมดครู
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b === btn));
+      const target = btn.dataset.tab;
+      document.querySelectorAll(".teacher-tab-pane").forEach(p => {
+        p.hidden = p.id !== target;
+      });
+    });
+  });
+
+  // --- แท็บที่ 1: โหลดและแสดงตารางคะแนน ---
+  async function loadTeacherScores() {
+    const status = $("scores-status");
+    const url = getSheetUrl();
+    if (url) {
+      status.textContent = "⏳ กำลังดึงคะแนนล่าสุดจาก Google Sheets...";
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.ok && Array.isArray(data.scores)) {
+          allScores = data.scores.reverse();
+          status.textContent = `แสดงข้อมูลจาก Google Sheets ทั้งหมด ${allScores.length} รายการ`;
+          renderScoresTable();
+          return;
+        }
+      } catch (_) {
+        status.textContent = "⚠️ ดึงข้อมูลจาก Google Sheets ไม่สำเร็จ แสดงข้อมูลที่บันทึกในเครื่องแทน";
+      }
+    }
+
+    allScores = JSON.parse(localStorage.getItem(STORAGE.SCORES) || "[]");
+    if (!url) status.textContent = `แสดงข้อมูลที่บันทึกในเครื่องนี้ ${allScores.length} รายการ`;
+    renderScoresTable();
+  }
+
+  function renderScoresTable() {
+    const q = $("search-score-input").value.trim().toLowerCase();
+    const sortBy = $("sort-score-select").value;
+    const tbody = $("scores-tbody");
+    tbody.replaceChildren();
+
+    const filtered = allScores.filter(r =>
+      [r.first_name, r.last_name, r.classroom, r.student_number].some(v =>
+        String(v || "").toLowerCase().includes(q)
+      )
+    );
+
+    const collator = new Intl.Collator("th", { numeric: true });
+    if (sortBy === "score") {
+      filtered.sort((a, b) => (b.total_score || 0) - (a.total_score || 0));
+    } else if (sortBy === "room") {
+      filtered.sort((a, b) => collator.compare(a.classroom || "", b.classroom || "") || collator.compare(a.student_number || "", b.student_number || ""));
+    } else if (sortBy === "number") {
+      filtered.sort((a, b) => collator.compare(a.student_number || "", b.student_number || ""));
+    }
+
+    if (!filtered.length) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:24px; color:var(--muted);">ยังไม่มีข้อมูลคะแนนนักเรียน</td></tr>`;
+      return;
+    }
+
+    filtered.forEach(r => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td style="font-weight:600;">${r.first_name} ${r.last_name}</td>
+        <td>${r.student_number}</td>
+        <td>${r.classroom}</td>
+        <td>${r.match_score}</td>
+        <td>${r.type_score}</td>
+        <td style="color:var(--gold-bright); font-weight:700;">${r.total_score}</td>
+        <td style="color:var(--muted); font-size:13px;">${r.submitted_at}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  $("search-score-input").addEventListener("input", renderScoresTable);
+  $("sort-score-select").addEventListener("change", renderScoresTable);
+  $("refresh-scores-btn").addEventListener("click", loadTeacherScores);
+
+  $("export-csv-btn").addEventListener("click", () => {
+    if (!allScores.length) {
+      notify("ยังไม่มีข้อมูลคะแนนสำหรับดาวน์โหลด");
+      return;
+    }
+    const headers = ["ชื่อ", "นามสกุล", "เลขที่", "ห้อง", "คะแนนจับคู่ลักษณะ (200)", "คะแนนจำแนกประเภท (200)", "คะแนนรวม (400)", "เวลาที่ส่ง"];
+    const rows = allScores.map(r => [
+      `"${r.first_name}"`,
+      `"${r.last_name}"`,
+      `"${r.student_number}"`,
+      `"${r.classroom}"`,
+      r.match_score,
+      r.type_score,
+      r.total_score,
+      `"${r.submitted_at}"`
+    ].join(","));
+
+    const blob = new Blob(["\uFEFF" + [headers.join(","), ...rows].join("\n")], { type: "text/csv;charset=utf-8;" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `คะแนนวิเคราะห์สื่อ_ม4_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    notify("ดาวน์โหลดไฟล์ Excel (CSV) เรียบร้อยแล้ว");
+  });
+
+  // --- แท็บที่ 2: แก้ไขโจทย์ทั้ง 20 ข้อ ---
+  function renderQuestionsEditor() {
+    const grid = $("questions-editor-grid");
+    grid.replaceChildren();
+
+    mediaBank.forEach((item, index) => {
+      const card = document.createElement("div");
+      card.className = "q-edit-card";
+      card.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong style="color:var(--gold-bright);">ข้อที่ ${index + 1}</strong>
+          <span class="pill-tag" style="font-size:11px; padding:2px 9px;">ID #${item.id}</span>
+        </div>
+        <img id="edit-prev-${index}" class="q-edit-preview" src="${item.imageUrl}" alt="${item.name}">
+        <div class="field-group">
+          <label>ชื่อสื่อ</label>
+          <input id="edit-name-${index}" class="arcade-input" value="${item.name}">
+        </div>
+        <div class="field-group">
+          <label>ลิงก์รูปภาพ (URL)</label>
+          <input id="edit-img-${index}" class="arcade-input" value="${item.imageUrl}">
+        </div>
+        <div class="field-group">
+          <label>ลักษณะสำคัญ (เฉลยขั้นที่ 1)</label>
+          <input id="edit-desc-${index}" class="arcade-input" value="${item.desc}">
+        </div>
+        <div class="field-group">
+          <label>ประเภทสื่อ (เฉลยขั้นที่ 2)</label>
+          <select id="edit-type-${index}" class="arcade-select">
+            <option value="สื่อสิ่งพิมพ์" ${item.type === "สื่อสิ่งพิมพ์" ? "selected" : ""}>สื่อสิ่งพิมพ์</option>
+            <option value="สื่ออิเล็กทรอนิกส์" ${item.type === "สื่ออิเล็กทรอนิกส์" ? "selected" : ""}>สื่ออิเล็กทรอนิกส์</option>
+          </select>
+        </div>
+      `;
+      grid.appendChild(card);
+
+      // อัปเดตพรีวิวภาพสดทันทีเมื่อวาง URL ใหม่
+      const imgInput = $(`edit-img-${index}`);
+      const prevImg = $(`edit-prev-${index}`);
+      prevImg.onerror = () => {
+        prevImg.src = "https://placehold.co/600x300/14102b/ffcf75?text=ไม่พบรูปภาพ";
+      };
+      imgInput.addEventListener("input", () => {
+        prevImg.src = imgInput.value.trim();
+      });
+    });
+  }
+
+  $("save-questions-btn").addEventListener("click", async () => {
+    const updated = [];
+    for (let i = 0; i < 20; i++) {
+      const name = $(`edit-name-${i}`).value.trim();
+      const imageUrl = $(`edit-img-${i}`).value.trim();
+      const desc = $(`edit-desc-${i}`).value.trim();
+      const type = $(`edit-type-${i}`).value;
+
+      if (!name || !desc) {
+        notify(`กรุณากรอกชื่อสื่อและลักษณะสำคัญในข้อที่ ${i + 1} ให้ครบถ้วน`);
+        return;
+      }
+      updated.push({
+        id: mediaBank[i].id,
+        name,
+        imageUrl: imageUrl || DEFAULT_MEDIA_BANK[i].imageUrl,
+        desc,
+        type
+      });
+    }
+
+    mediaBank = updated;
+    localStorage.setItem(STORAGE.BANK, JSON.stringify(mediaBank));
+
+    const url = getSheetUrl();
+    if (url) {
+      notify("⏳ กำลังบันทึกชุดโจทย์ไปยัง Google Sheets...");
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          body: JSON.stringify({ action: "save_config", config: mediaBank })
+        });
+        const json = await res.json();
+        if (json.ok) {
+          notify("✅ บันทึกโจทย์ทั้ง 20 ข้อลงเครื่องและ Google Sheets เรียบร้อยแล้ว!");
+          return;
+        }
+      } catch (_) {}
+      notify("⚠️ บันทึกลงเครื่องแล้ว แต่ซิงก์ขึ้น Google Sheets ไม่สำเร็จ");
+    } else {
+      notify("💾 บันทึกโจทย์ทั้ง 20 ข้อลงในเครื่องเรียบร้อยแล้ว");
+    }
+  });
+
+  $("reset-questions-btn").addEventListener("click", () => {
+    mediaBank = structuredClone(DEFAULT_MEDIA_BANK);
+    localStorage.setItem(STORAGE.BANK, JSON.stringify(mediaBank));
+    renderQuestionsEditor();
+    notify("คืนค่าโจทย์และรูปภาพเริ่มต้นทั้ง 20 ข้อแล้ว (กดปุ่มบันทึกเพื่อยืนยันขึ้น Google Sheets)");
+  });
+
+  // --- แท็บที่ 3: ตั้งค่า Google Sheets ---
+  $("save-sheet-url-btn").addEventListener("click", () => {
+    const val = $("sheet-url-input").value.trim();
+    if (val && !val.startsWith("https://script.google.com/")) {
+      notify("⚠️ ลิงก์ควรขึ้นต้นด้วย https://script.google.com/...");
+      return;
+    }
+    if (val) {
+      localStorage.setItem(STORAGE.SHEET_URL, val);
+      notify("✅ บันทึกลิงก์ Google Sheets เรียบร้อยแล้ว");
+    } else {
+      localStorage.removeItem(STORAGE.SHEET_URL);
+      notify("ยกเลิกการเชื่อมต่อ Google Sheets แล้ว");
+    }
+    updateSyncStatus();
+    loadTeacherScores();
+  });
+
+  $("copy-script-btn").addEventListener("click", () => {
+    const temp = document.createElement("textarea");
+    temp.value = APPS_SCRIPT_CODE;
+    document.body.appendChild(temp);
+    temp.select();
+    const ok = document.execCommand("copy");
+    temp.remove();
+    notify(ok ? "📋 คัดลอกโค้ด Apps Script ลงคลิปบอร์ดแล้ว" : "คัดลอกไม่สำเร็จ กรุณากดคัดลอกด้วยตนเอง");
+  });
+
+  // เริ่มต้นทำงานเมื่อโหลดหน้าเว็บ
+  window.addEventListener("DOMContentLoaded", async () => {
+    updateSyncStatus();
+    await syncConfigFromSheets();
+    checkResumeState();
+    lucide.createIcons();
+  });
+</script>
+</body>
+</html>
