@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FACT OR OPINION : จริงหรือคิด?</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eaf3ff;--card:#fff;--ink:#0b2a5b;--mut:#5a6f94;--pri:#1f6feb;--pri2:#0b3d91;--ok:#16a34a;--okbg:#dcfce7;--no:#dc2626;--nobg:#fee2e2;--line:#cfe0fa;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1730;--card:#12264a;--ink:#e8f0ff;--mut:#9db3da;--pri:#4d94ff;--pri2:#9cc3ff;--okbg:#0f3a24;--nobg:#4a1717;--line:#24407a}}
+:root[data-theme="dark"]{--bg:#0a1730;--card:#12264a;--ink:#e8f0ff;--mut:#9db3da;--pri:#4d94ff;--pri2:#9cc3ff;--okbg:#0f3a24;--nobg:#4a1717;--line:#24407a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Prompt','Noto Sans Thai','Sarabun',system-ui,sans-serif;line-height:1.6}
+.wrap{max-width:760px;margin:0 auto;padding:16px}
+nav{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
+nav button{background:transparent;border:2px solid var(--pri);color:var(--pri);border-radius:99px;padding:6px 16px;font:inherit;cursor:pointer}
+nav button.on{background:var(--pri);color:#fff}
+.card{background:var(--card);border-radius:22px;padding:22px;box-shadow:0 8px 28px rgba(31,111,235,.15);border:1px solid var(--line)}
+h1{margin:0;font-size:clamp(26px,6vw,40px);text-align:center;color:var(--pri2)}
+.sub{text-align:center;color:var(--mut);margin:6px 0 16px}
+label{display:block;font-weight:600;margin:10px 0 4px}
+input{width:100%;padding:12px 14px;border:2px solid var(--line);border-radius:14px;font:inherit;background:var(--bg);color:var(--ink)}
+input:focus{outline:none;border-color:var(--pri)}
+.row{display:flex;gap:10px}.row>div{flex:1}
+.big{width:100%;margin-top:16px;padding:16px;border:0;border-radius:16px;font:inherit;font-size:20px;font-weight:700;color:#fff;background:linear-gradient(135deg,#3b8cff,#1245b3);cursor:pointer;box-shadow:0 5px 0 #0b2f7a}
+.big:active{transform:translateY(3px);box-shadow:0 2px 0 #0b2f7a}
+.big:disabled{opacity:.5}
+.hero{font-size:60px;text-align:center}
+.bar{height:14px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#3b8cff,#1245b3);transition:width .4s}
+.top{display:flex;justify-content:space-between;font-weight:600;margin-bottom:8px}
+.q{font-size:clamp(20px,4.6vw,26px);font-weight:600;text-align:center;padding:26px 8px;min-height:120px;display:flex;align-items:center;justify-content:center}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opt{padding:22px 8px;border-radius:18px;border:3px solid var(--pri);background:var(--card);color:var(--pri2);font:inherit;font-size:20px;font-weight:700;cursor:pointer}
+.opt:disabled{cursor:default}
+.opt.right{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.opt.wrong{background:var(--nobg);border-color:var(--no);color:var(--no)}
+.fb{margin-top:14px;padding:14px;border-radius:14px;font-weight:600}
+.fb.ok{background:var(--okbg);color:var(--ok);animation:pop .4s}
+.fb.no{background:var(--nobg);color:var(--no)}
+.fb small{display:block;font-weight:400;color:var(--ink)}
+@keyframes pop{0%{transform:scale(.8)}60%{transform:scale(1.06)}100%{transform:scale(1)}}
+.conf{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:9}
+.conf span{position:absolute;top:-30px;font-size:26px;animation:fall 1.4s ease-in forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(360deg);opacity:.2}}
+.score{font-size:64px;font-weight:700;text-align:center;color:var(--pri)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+.stat{background:var(--bg);border-radius:14px;padding:10px;text-align:center}
+.stat b{display:block;font-size:22px;color:var(--pri2)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.tools input{flex:1;min-width:160px}
+.sm{padding:10px 14px;border-radius:12px;border:2px solid var(--pri);background:var(--card);color:var(--pri);font:inherit;font-weight:600;cursor:pointer}
+.sm.fill{background:var(--pri);color:#fff}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px;min-width:520px}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line)}
+th{background:var(--bg);color:var(--pri2);cursor:pointer;white-space:nowrap}
+.note{font-size:13px;color:var(--mut);text-align:center;margin-top:10px}
+.warn{background:var(--nobg);color:var(--no);padding:10px;border-radius:12px;margin-bottom:10px;font-size:14px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav id="nav" class="hide"><button id="nS" class="on">👩‍🎓 นักเรียน</button><button id="nT">👩‍🏫 ครู</button></nav>
+<div id="app"></div>
+<div class="note" id="mode"></div>
+</div>
+<script>
+const Q=[
+["การตื่นเช้าเป็นสิ่งที่ดีที่สุดสำหรับทุกคน",0,"“ดีที่สุดสำหรับทุกคน” เป็นการตัดสินตามความคิดของผู้พูด แต่ละคนมีวิถีชีวิตไม่เหมือนกัน"],
+["ประเทศไทยมีการปกครองในระบอบประชาธิปไตย",1,"เป็นข้อมูลเรื่องรูปแบบการปกครอง ซึ่งตรวจสอบได้จากรัฐธรรมนูญ"],
+["คนโกงอาจได้รับผลประโยชน์ในระยะสั้น แต่สุดท้ายย่อมสูญเสียความน่าเชื่อถือ",0,"เป็นการคาดคะเนและสรุปตามความคิดของผู้พูด (“อาจ” “ย่อม”) ยังพิสูจน์ไม่ได้แน่ชัด"],
+["การทุจริตคอร์รัปชันส่งผลกระทบต่อการพัฒนาเศรษฐกิจและสังคมของประเทศ",1,"มีข้อมูลและงานวิจัยที่ตรวจสอบและอ้างอิงได้"],
+["การทำงานเป็นทีมมีประสิทธิภาพมากกว่าการทำงานคนเดียวเสมอ",0,"คำว่า “มากกว่า…เสมอ” เป็นการเปรียบเทียบตามความเห็นของผู้พูด ขึ้นกับลักษณะงานและคน"],
+["การเคารพกฎจราจรช่วยลดความเสี่ยงในการเกิดอุบัติเหตุ",1,"มีสถิติและข้อมูลด้านความปลอดภัยทางถนนที่ตรวจสอบได้"],
+["ปัจจุบันมีการนำปัญญาประดิษฐ์ (AI) มาใช้ในการทำงานหลายด้าน",1,"สังเกตและตรวจสอบได้จากการใช้งานจริงในหลายวงการ"],
+["คนที่ไม่แสดงความคิดเห็นคือคนที่ไม่มีความคิดเป็นของตนเอง",0,"เป็นการตัดสินผู้อื่นตามความคิดของผู้พูด พิสูจน์ไม่ได้"],
+["ปัจจุบันสื่อสังคมออนไลน์เป็นช่องทางหนึ่งที่ประชาชนใช้ในการแสดงความคิดเห็นต่อประเด็นทางสังคมและการเมือง",1,"เป็นสิ่งที่เกิดขึ้นจริงและสังเกตหรือตรวจสอบได้"],
+["แม้โทรศัพท์มือถือจะช่วยให้ติดต่อสื่อสารได้สะดวก แต่การใช้โทรศัพท์ระหว่างการเรียนโดยไม่ได้รับอนุญาตถือเป็นพฤติกรรมที่ไม่เหมาะสม",0,"“ไม่เหมาะสม” เป็นการตัดสินคุณค่าตามความคิดของผู้พูด"]
+];
+const KEY='fo_local',$=s=>document.querySelector(s);
+let db=null,user=null,uid=null,isTeacher=false,view='home',me=JSON.parse(localStorage.getItem('fo_me')||'{}');
+let qs=[],qi=0,score=0,answered=false,saved=false,rows=[],sortK='best',sortD=-1,term='',unsub=null;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const kk=(r,n)=>(r+'-'+n).replace(/\s/g,'');
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function store(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return{}}}
+async function init(){
+  try{if(window.claude&&claude.use){db=await claude.use('db');user=await claude.use('user');if(user){try{uid=await user.id()}catch(e){}isTeacher=!!user.canEdit()}}}catch(e){db=null}
+  if(!db||!uid){db=null;isTeacher=location.hash==='#teacher'}
+  if(isTeacher)$('#nav').classList.remove('hide');
+  $('#mode').textContent=db?'💾 บันทึกข้อมูลออนไลน์':'⚠️ โหมดทดลอง: บันทึกในเครื่องนี้เท่านั้น';
+  render();
+}
+function go(v){view=v;render()}
+$('#nS').onclick=()=>go(view==='teacher'?'home':view);
+$('#nT').onclick=()=>go('teacher');
+function render(){
+  $('#nS').className=view==='teacher'?'':'on';$('#nT').className=view==='teacher'?'on':'';
+  if(unsub&&view!=='teacher'){unsub();unsub=null}
+  if(view==='teacher'&&!isTeacher)view='home';
+  ({home,quiz,result,teacher})[view]();
+}
+function home(){
+  $('#app').innerHTML=`<div class="card"><div class="hero">🔍</div><h1>FACT OR OPINION<br>จริงหรือคิด?</h1>
+  <p class="sub">อ่านข้อความแล้วตัดสินใจว่าเป็น <b>ข้อเท็จจริง</b> (พิสูจน์ได้) หรือ <b>ข้อคิดเห็น</b> (ความรู้สึก/ความคิดส่วนตัว) ทั้งหมด 10 ข้อ ข้อละ 1 คะแนน</p>
+  <label>ชื่อ-นามสกุล</label><input id="fn" value="${esc(me.name||'')}" placeholder="เช่น สมชาย ใจดี">
+  <div class="row"><div><label>ห้อง</label><input id="fr" value="${esc(me.room||'')}" placeholder="เช่น ม.1/2"></div><div><label>เลขที่</label><input id="fo" type="number" min="1" value="${esc(me.no||'')}" placeholder="เช่น 15"></div></div>
+  <div id="err" class="warn hide"></div>
+  <button class="big" id="go">🚀 เริ่มทำกิจกรรม</button></div>`;
+  $('#go').onclick=async()=>{
+    const n=$('#fn').value.trim(),r=$('#fr').value.trim(),o=$('#fo').value.trim();
+    if(!n||!r||!o){const e=$('#err');e.textContent='กรุณากรอกชื่อ-นามสกุล ห้อง และเลขที่ให้ครบ';e.classList.remove('hide');return}
+    me={name:n,room:r,no:o};localStorage.setItem('fo_me',JSON.stringify(me));
+    if(await played()){const e=$('#err');e.textContent='รายชื่อนี้ (ห้อง/เลขที่นี้) ทำกิจกรรมไปแล้ว ทำซ้ำไม่ได้ หากต้องการทำใหม่กรุณาแจ้งครู';e.classList.remove('hide');return}
+    qs=shuffle(Q);qi=0;score=0;answered=false;saved=false;go('quiz');
+  };
+}
+function quiz(){
+  const q=qs[qi];
+  $('#app').innerHTML=`<div class="card"><div class="top"><span>ข้อ ${qi+1}/${qs.length}</span><span>⭐ ${score} คะแนน</span></div>
+  <div class="bar"><i style="width:${qi/qs.length*100}%"></i></div>
+  <div class="q">${esc(q[0])}</div>
+  <div class="opts"><button class="opt" data-a="1">✅ ข้อเท็จจริง</button><button class="opt" data-a="0">💭 ข้อคิดเห็น</button></div>
+  <div id="fb"></div></div>`;
+  answered=false;
+  document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>pick(b,+b.dataset.a));
+}
+function pick(btn,a){
+  if(answered)return;answered=true;
+  const q=qs[qi],ok=a===q[1];
+  document.querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(+b.dataset.a===q[1])b.classList.add('right')});
+  if(!ok)btn.classList.add('wrong');
+  if(ok){score++;confetti()}
+  const last=qi===qs.length-1;
+  $('#fb').innerHTML=`<div class="fb ${ok?'ok':'no'}">${ok?'🎉 เก่งมาก! ถูกต้อง':'ยังไม่ถูกนะ ลองใหม่ข้อต่อไป 💪'}<small>เฉลย: ${q[1]?'ข้อเท็จจริง':'ข้อคิดเห็น'} — ${esc(q[2])}</small></div>
+  <button class="big" id="nx">${last?'ดูผลคะแนน 🏆':'ข้อต่อไป ➡️'}</button>`;
+  $('#nx').onclick=()=>{if(last){go('result');finish()}else{qi++;quiz()}};
+}
+function confetti(){
+  const c=document.createElement('div');c.className='conf';
+  c.innerHTML=Array.from({length:22},()=>`<span style="left:${Math.random()*100}%;animation-delay:${Math.random()*.5}s">${['🎉','⭐','✨','💙'][Math.floor(Math.random()*4)]}</span>`).join('');
+  document.body.appendChild(c);setTimeout(()=>c.remove(),2200);
+}
+function msg(p){return p>=90?'ยอดเยี่ยมมาก! คุณแยกข้อเท็จจริงกับข้อคิดเห็นได้เก่งสุด ๆ 🌟':p>=70?'ดีมาก! เก่งแล้ว อีกนิดเดียวก็เต็ม 👏':p>=50?'พยายามได้ดี ลองอ่านเฉลยแล้วเล่นอีกครั้งนะ 💪':'ไม่เป็นไร! ทบทวนอีกนิด ครั้งหน้าต้องทำได้ดีขึ้นแน่นอน 😊'}
+function result(){
+  const p=Math.round(score/qs.length*100);
+  $('#app').innerHTML=`<div class="card"><div class="hero">🏆</div><h1>สรุปผลคะแนน</h1>
+  <p class="sub">${esc(me.name)} · ห้อง ${esc(me.room)} · เลขที่ ${esc(me.no)}</p>
+  <div class="score">${score}/${qs.length}</div><p class="sub">คะแนน (${p}%)</p>
+  <div class="stats"><div class="stat"><b>${score}</b>ตอบถูก</div><div class="stat"><b>${qs.length-score}</b>ตอบผิด</div><div class="stat"><b>${p}%</b>ร้อยละ</div></div>
+  <div class="fb ok" style="text-align:center">${msg(p)}</div>
+  <div id="sv" class="note">กำลังบันทึกคะแนน…</div>
+  <button class="big" id="again">🔁 เล่นอีกครั้ง</button></div>`;
+  $('#again').onclick=()=>go('home');
+}
+async function finish(){
+  if(saved)return;saved=true;
+  const key=kk(me.room,me.no),now=Date.now(),total=qs.length;
+  const upd=(m)=>{const o=m[key]||{attempts:0,best:0,history:[]};
+    return Object.assign({},o,{name:me.name,room:me.room,no:me.no,last:score,total,best:Math.max(o.best||0,score),attempts:(o.attempts||0)+1,ts:now,history:[...(o.history||[]),{s:score,t:now}].slice(-10)})};
+  try{
+    if(db){const ref=db.doc('results/'+uid);const sn=await ref.get();const d=sn.exists?sn.data():{};
+      const st=d.students||{};if(st[key]){$('#sv').textContent='มีคะแนนของรายชื่อนี้อยู่แล้ว';return}st[key]=upd(st);await ref.set({students:st})}
+    else{const s=store();const m=s.local||{};if(m[key]){$('#sv').textContent='มีคะแนนของรายชื่อนี้อยู่แล้ว';return}m[key]=upd(m);s.local=m;localStorage.setItem(KEY,JSON.stringify(s))}
+    $('#sv').textContent='✅ บันทึกคะแนนเรียบร้อยแล้ว'
+  }catch(e){const el=$('#sv');if(el){el.textContent='❌ บันทึกไม่สำเร็จ กรุณาแจ้งครู';saved=false}}
+}
+function flat(docs){const out=[];docs.forEach(d=>{const x=d.data()||{};Object.values(x.students||{}).forEach(s=>out.push(Object.assign({_doc:d.id,demo:!!x.demo},s)))});return out}
+function teacher(){
+  if(!isTeacher){$('#app').innerHTML='<div class="card"><div class="hero">🔒</div><h1>สำหรับครูเท่านั้น</h1><p class="sub">หน้านี้เปิดได้เฉพาะเจ้าของ/ผู้แก้ไขหน้าเว็บนี้ (ต้องเข้าสู่ระบบ claude.ai ด้วยบัญชีครู)</p></div>';return}
+  $('#app').innerHTML=`<div class="card"><h1 style="font-size:28px">📊 แดชบอร์ดครู</h1><div class="stats" id="st"></div>
+  <div class="tools"><input id="se" placeholder="🔎 ค้นหาชื่อหรือเลขที่" value="${esc(term)}"><button class="sm fill" id="ex">⬇️ ดาวน์โหลด CSV</button></div>
+  <div class="tools"><button class="sm" id="dm">➕ สร้างข้อมูลตัวอย่าง</button><button class="sm" id="dd">🗑️ ลบข้อมูลตัวอย่าง</button></div>
+  <div class="tw"><table><thead><tr><th data-k="no">เลขที่</th><th data-k="name">ชื่อ-นามสกุล</th><th data-k="room">ห้อง</th><th data-k="last">ล่าสุด</th><th data-k="best">ดีที่สุด</th><th data-k="attempts">ครั้ง</th><th data-k="ts">เวลา</th><th></th></tr></thead><tbody id="tb"></tbody></table></div>
+  <div class="note">คลิกหัวตารางเพื่อเรียงลำดับ · ข้อมูลถูกบันทึกถาวร ตรวจสอบย้อนหลังได้</div></div>`;
+  $('#se').oninput=e=>{term=e.target.value;draw()};
+  document.querySelectorAll('th').forEach(t=>t.onclick=()=>{const k=t.dataset.k;sortD=sortK===k?-sortD:-1;sortK=k;draw()});
+  $('#tb').onclick=resetRow;$('#ex').onclick=exportCsv;$('#dm').onclick=demo;$('#dd').onclick=delDemo;
+  if(db){if(unsub)unsub();unsub=db.collection('results').onSnapshot(s=>{rows=flat(s.docs);draw()},e=>{$('#tb').innerHTML='<tr><td colspan=7>โหลดข้อมูลไม่สำเร็จ</td></tr>'})}
+  else{rows=Object.values(store().local||{});const d=store().demo||{};rows=rows.concat(Object.values(d).map(x=>Object.assign({demo:true},x)));draw()}
+}
+function view_(){
+  const t=term.trim().toLowerCase();
+  let r=rows.filter(s=>!t||String(s.name).toLowerCase().includes(t)||String(s.no)===t);
+  r.sort((a,b)=>{const x=a[sortK],y=b[sortK];return (typeof x==='string'?x.localeCompare(y,'th'):(x||0)-(y||0))*sortD||((b.best||0)-(a.best||0))});
+  return r;
+}
+function draw(){armed=null;
+  const r=view_(),n=rows.length,avg=n?rows.reduce((a,s)=>a+(s.best||0),0)/n:0,tot=rows.reduce((a,s)=>a+(s.best||0),0);
+  $('#st').innerHTML=`<div class="stat"><b>${n}</b>ทำแล้ว (คน)</div><div class="stat"><b>${avg.toFixed(1)}</b>เฉลี่ย/10</div><div class="stat"><b>${tot}</b>คะแนนรวม</div>`;
+  $('#tb').innerHTML=r.length?r.map(s=>`<tr><td>${esc(s.no)}</td><td>${esc(s.name)}${s.demo?' <small>(ตัวอย่าง)</small>':''}</td><td>${esc(s.room)}</td><td>${s.last}/${s.total||10}</td><td><b>${s.best}</b></td><td>${s.attempts}</td><td>${new Date(s.ts).toLocaleString('th-TH',{dateStyle:'short',timeStyle:'short'})}</td><td><button class="sm" data-r="${esc(s._doc)}|${kk(s.room,s.no)}">รีเซ็ต</button></td></tr>`).join(''):'<tr><td colspan=8 style="text-align:center">ยังไม่มีข้อมูล</td></tr>';
+}
+async function exportCsv(){
+  const r=view_(),q=v=>'"'+String(v).replace(/"/g,'""')+'"';
+  const csv='\uFEFF'+['ห้อง,เลขที่,ชื่อ-นามสกุล,คะแนนล่าสุด,คะแนนสูงสุด,จำนวนครั้ง,เวลา'].concat(r.map(s=>[q(s.room),q(s.no),q(s.name),s.last,s.best,s.attempts,q(new Date(s.ts).toLocaleString('th-TH'))].join(','))).join('\n');
+  try{const d=await claude.use('downloads');if(!d)throw 0;await d.save({filename:'fact-or-opinion-scores.csv',data:csv})}catch(e){}
+}
+const DEMO=[["สมชาย ใจดี","ม.1/1",1,9],["สมหญิง รักเรียน","ม.1/1",2,8],["ปรีชา มานะ","ม.1/1",3,7],["นภา ฟ้าใส","ม.1/2",4,10],["อนันต์ สุขสันต์","ม.1/2",5,5],["กมล ศรีสุข","ม.1/2",6,8],["วรรณา แสงทอง","ม.1/3",7,4],["ธนา เก่งกล้า","ม.1/3",8,9]];
+async function demo(){
+  const now=Date.now(),mk=(n,r,no,s)=>({name:n,room:r,no:String(no),last:s,total:10,best:s,attempts:1,ts:now-no*600000,history:[{s,t:now-no*600000}]});
+  if(db){for(const d of DEMO)await db.doc('results/demo-'+d[2]).set({demo:true,students:{[kk(d[1],d[2])]:mk(...d)}})}
+  else{const s=store();s.demo={};DEMO.forEach(d=>s.demo[kk(d[1],d[2])]=mk(...d));localStorage.setItem(KEY,JSON.stringify(s));teacher()}
+}
+async function delDemo(){
+  if(db){for(const d of DEMO)try{await db.doc('results/demo-'+d[2]).delete()}catch(e){}}
+  else{const s=store();delete s.demo;localStorage.setItem(KEY,JSON.stringify(s));teacher()}
+}
+let armed=null;
+async function played(){
+  const key=kk(me.room,me.no);
+  try{if(db){const sn=await db.doc('results/'+uid).get();return sn.exists&&!!((sn.data()||{}).students||{})[key]}
+  return !!(store().local||{})[key]}catch(e){return false}
+}
+async function resetRow(e){
+  const b=e.target.closest('button[data-r]');if(!b)return;
+  if(armed!==b.dataset.r){armed=b.dataset.r;b.textContent='ยืนยัน?';b.classList.add('fill');return}
+  armed=null;const [doc,key]=b.dataset.r.split('|');
+  try{
+    if(db){const ref=db.doc('results/'+doc);const sn=await ref.get();if(sn.exists){const d=sn.data(),st=d.students||{};delete st[key];await ref.set(Object.assign({},d,{students:st}))}}
+    else{const s=store();[s.local,s.demo].forEach(m=>m&&delete m[key]);localStorage.setItem(KEY,JSON.stringify(s));rows=Object.values(s.local||{}).concat(Object.values(s.demo||{}).map(x=>Object.assign({demo:true},x)));draw()}
+  }catch(err){}
+}
+init();
+</script>
+</body>
+</html>
